@@ -1,5 +1,10 @@
 import unittest
 from src.gini import *
+from mpyc.runtime import mpc
+
+secint = mpc.SecInt()
+output = mpc.output
+run = mpc.run
 
 
 class GiniTest(unittest.TestCase):
@@ -21,3 +26,12 @@ class GiniTest(unittest.TestCase):
         total = 1
         gain = (1 / total) * numerator / avoid_zero(denominator)
         self.assertEqual(gain, 0)
+
+    def test_gini_gain_mpc(self):
+        numerator, denominator = gini_gain_quotient(
+            secint(2), secint(2), secint(1), secint(1), secint(1), secint(1))
+        numerator = float(run(output(numerator)))
+        denominator = float(run(output(denominator)))
+        total = 4
+        gain = (1 / total) * (numerator / denominator)
+        self.assertEqual(gain, 0.5)
