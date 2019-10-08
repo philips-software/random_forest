@@ -1,11 +1,3 @@
-def gini_impurity(amount_classified_as_zero, amount_classified_as_one):
-    if amount_classified_as_one + amount_classified_as_zero == 0:
-        return 1
-
-    total = amount_classified_as_zero + amount_classified_as_one
-    ratio_zero = amount_classified_as_zero / total
-    ratio_one = amount_classified_as_one / total
-    return 1 - ratio_zero ** 2 - ratio_one ** 2
 
 
 def gini_gain_quotient(

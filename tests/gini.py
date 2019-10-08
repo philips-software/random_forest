@@ -4,16 +4,6 @@ from src.gini import *
 
 class GiniTest(unittest.TestCase):
 
-    def test_empty_attribute(self):
-        self.assertEqual(gini_impurity(0, 0), 1)
-
-    def test_balanced_attribute(self):
-        self.assertEqual(gini_impurity(3, 3), 0.5)
-
-    def test_homogeneous_attribute(self):
-        self.assertEqual(gini_impurity(3, 0), 0)
-        self.assertEqual(gini_impurity(0, 3), 0)
-
     def test_gini_gain_uniform(self):
         numerator, denominator = gini_gain_quotient(2, 2, 1, 1, 1, 1)
         total = 4
