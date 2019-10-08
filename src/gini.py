@@ -8,7 +8,7 @@ def gini_impurity(amount_classified_as_zero, amount_classified_as_one):
     return 1 - ratio_zero ** 2 - ratio_one ** 2
 
 
-def gini_gain_scaled_quotient(
+def gini_gain_quotient(
         left_total,
         right_total,
         left_amount_classified_zero,
@@ -32,6 +32,8 @@ def gini_gain_scaled_quotient(
     (1 / total) * (numerator / denominator), where total is the total number
     of samples (left and right)
 
+    May return a denominator of 0, use avoid_zero() to avoid division by zero.
+
     See also:
     Explanation of Gini gain -- https://victorzhou.com/blog/gini-impurity/
     Secure Training of Decision Trees with Continuous Attributes -- paper to be
@@ -44,3 +46,17 @@ def gini_gain_scaled_quotient(
                       right_amount_classified_one ** 2)
     denominator = left_total * right_total
     return (numerator, denominator)
+
+
+def avoid_zero(denominator, precision=8):
+    """
+    Avoids division by zero by scaling the denominator.
+
+    Keyword arguments:
+    denominator -- the denominator to be scaled
+    precision -- (defaults to 8), the amount of scaling that is performed
+
+    Return value:
+    denominator * precision + 1
+    """
+    return denominator * precision + 1
