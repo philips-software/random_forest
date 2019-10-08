@@ -16,9 +16,7 @@ class GiniTest(unittest.TestCase):
 
     def test_gini_gain_single_value(self):
         numerator, denominator = gini_gain_scaled_quotient(1, 0, 1, 0, 0, 0)
-        total = 1
-        gain = (1 / total) * numerator / denominator
-        self.assertEqual(gain, 1)
+        self.assertEqual((numerator, denominator), (0, 0))
 
     def test_gini_gain_uniform(self):
         numerator, denominator = gini_gain_scaled_quotient(2, 2, 1, 1, 1, 1)
