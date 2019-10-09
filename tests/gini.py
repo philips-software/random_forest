@@ -2,7 +2,7 @@ import unittest
 from src.gini import *
 from mpyc.runtime import mpc
 
-secint = mpc.SecInt()
+s = mpc.SecInt()
 output = mpc.output
 run = mpc.run
 
@@ -29,7 +29,7 @@ class GiniTest(unittest.TestCase):
 
     def test_gini_gain_mpc(self):
         numerator, denominator = gini_gain_quotient(
-            secint(2), secint(2), secint(1), secint(1), secint(1), secint(1))
+            s(2), s(2), s(1), s(1), s(1), s(1))
         numerator = run(output(numerator))
         denominator = run(output(denominator))
         total = 4
