@@ -1,5 +1,5 @@
 import unittest
-from src.gini import *
+from src.gini import gini_gain_quotient, avoid_zero
 from mpyc.runtime import mpc
 
 s = mpc.SecInt()
