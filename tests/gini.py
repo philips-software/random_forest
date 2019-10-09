@@ -30,8 +30,8 @@ class GiniTest(unittest.TestCase):
     def test_gini_gain_mpc(self):
         numerator, denominator = gini_gain_quotient(
             secint(2), secint(2), secint(1), secint(1), secint(1), secint(1))
-        numerator = float(run(output(numerator)))
-        denominator = float(run(output(denominator)))
+        numerator = run(output(numerator))
+        denominator = run(output(denominator))
         total = 4
-        gain = (1 / total) * (numerator / denominator)
+        gain = (1 / total) * float(numerator / denominator)
         self.assertEqual(gain, 0.5)
