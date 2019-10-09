@@ -13,9 +13,7 @@ def index_of_maximum(*quotients):
         quotient = quotients[index]
         is_new_maximum = ge_quotient(quotient, maximum)
         result = if_else(is_new_maximum, index, result)
-        maximum = (
-            if_else(is_new_maximum, quotient[0], maximum[0]),
-            if_else(is_new_maximum, quotient[1], maximum[1]))
+        maximum = if_else(is_new_maximum, quotient, maximum)
     return result
 
 
@@ -32,4 +30,15 @@ def ge_quotient(left, right):
 
 
 def if_else(condition, when_true, when_false):
+    if type(when_true) == tuple:
+        return if_else_tuple(condition, when_true, when_false)
+
     return condition * (when_true - when_false) + when_false
+
+
+def if_else_tuple(condition, when_true, when_false):
+    assert(len(when_true) == len(when_false))
+    return tuple(
+        if_else(condition, when_true[i], when_false[i])
+        for i in range(len(when_true))
+    )
