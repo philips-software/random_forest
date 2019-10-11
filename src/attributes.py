@@ -47,6 +47,17 @@ def calculate_aggregates(samples, outcomes):
     return aggregates
 
 
+def partition_on(samples, attribute_index, threshold):
+    left = []
+    right = []
+    for sample in samples:
+        if sample[attribute_index] > threshold:
+            right.append(sample)
+        else:
+            left.append(sample)
+    return left, right
+
+
 @dataclass
 class Aggregation:
     total: Any = 0
