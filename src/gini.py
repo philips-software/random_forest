@@ -42,7 +42,7 @@ def gini_gain_quotient(
 
 def avoid_zero(denominator, precision=8):
     """
-    Avoids division by zero by scaling the denominator.
+    Avoids division by zero by scaling the denominator, aka "alpha scale".
 
     Keyword arguments:
     denominator -- the denominator to be scaled

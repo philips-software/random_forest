@@ -1,6 +1,6 @@
 def index_of_maximum(*quotients):
     """
-    Returns the index of the maximum in a list of quotients.
+    Returns the index of the maximum in a list of quotients, aka "argmax".
 
     Only works for quotients that have positive numerator and denominator.
     """
