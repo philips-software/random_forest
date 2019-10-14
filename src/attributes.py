@@ -49,17 +49,18 @@ def calculate_aggregates(samples, outcomes):
 
 
 def partition_on(samples, is_active, attribute_index, threshold):
-    num_attributes = len(samples[0])
-    is_selected_attribute = [
-        i == attribute_index for i in range(num_attributes)]
-
-    selected_attribute = mpc.matrix_prod(
-        [is_selected_attribute], samples, True)[0]
+    selected_attribute = get_column(samples, attribute_index)
 
     left = [value <= threshold for value in selected_attribute]
     right = [(1 - l) for l in left]
 
     return left, right
+
+
+def get_column(samples, attribute_index):
+    num_attributes = len(samples[0])
+    is_selected = [i == attribute_index for i in range(num_attributes)]
+    return mpc.matrix_prod([is_selected], samples, True)[0]
 
 
 @dataclass
