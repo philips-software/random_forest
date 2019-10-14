@@ -33,13 +33,14 @@ class AttributeTests(unittest.TestCase):
 
     def test_partition_on(self):
         samples = [
-            [0, 1, 1, 0],
-            [1, 0, 1, 1],
-            [0, 0, 0, 1],
+            [s(0), s(1), s(1), s(0)],
+            [s(1), s(0), s(1), s(1)],
+            [s(0), s(0), s(0), s(1)],
         ]
-        best_attribute = 2
-        best_attribute_value = 0
-        left, right = partition_on(
-            samples, best_attribute, best_attribute_value)
-        self.assertEqual(left, [samples[2]])
-        self.assertEqual(right, [samples[0], samples[1]])
+        best_attribute = s(2)
+        best_attribute_value = s(0)
+        is_active = [s(1), s(1), s(1)]
+        left_active, right_active = partition_on(
+            samples, is_active, best_attribute, best_attribute_value)
+        self.assertEqual(run(output(left_active)), [0, 0, 1])
+        self.assertEqual(run(output(right_active)), [1, 1, 0])

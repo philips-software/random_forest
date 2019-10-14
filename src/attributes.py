@@ -1,5 +1,6 @@
 from src.gini import gini_gain_quotient, avoid_zero
 from src.maximum import index_of_maximum
+from mpyc.runtime import mpc
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -47,14 +48,17 @@ def calculate_aggregates(samples, outcomes):
     return aggregates
 
 
-def partition_on(samples, attribute_index, threshold):
-    left = []
-    right = []
-    for sample in samples:
-        if sample[attribute_index] > threshold:
-            right.append(sample)
-        else:
-            left.append(sample)
+def partition_on(samples, is_active, attribute_index, threshold):
+    num_attributes = len(samples[0])
+    is_selected_attribute = [
+        i == attribute_index for i in range(num_attributes)]
+
+    selected_attribute = mpc.matrix_prod(
+        [is_selected_attribute], samples, True)[0]
+
+    left = [value <= threshold for value in selected_attribute]
+    right = [(1 - l) for l in left]
+
     return left, right
 
 
