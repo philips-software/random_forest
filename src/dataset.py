@@ -21,5 +21,11 @@ class ObliviousDataset:
         is_selected = [i == index for i in range(self.number_of_columns)]
         return mpc.matrix_prod([is_selected], self.rows, True)[0]
 
+    def select_rows(self, active_rows):
+        self.active_rows = [
+            mpc.and_(self.active_rows[i], active_rows[i])
+            for i in range(len(active_rows))
+        ]
+
     def __eq__(self, other):
         return list(self.rows) == list(other.rows)

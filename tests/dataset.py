@@ -48,6 +48,37 @@ class ObliviousDatasetTest(unittest.TestCase):
             dataset.reveal(),
             [])
 
+    def test_select_rows(self):
+        dataset = ObliviousDataset(
+            [s(0),  s(1),  s(2)],
+            [s(10), s(11), s(12)],
+            [s(20), s(21), s(22)]
+        )
+        active_rows = [s(1), s(0), s(1)]
+        dataset.select_rows(active_rows)
+        self.assertEqual(
+            dataset.reveal(),
+            [
+                [0,  1,  2],
+                [20, 21, 22]
+            ]
+        )
+
+    def test_select_rows_twice(self):
+        dataset = ObliviousDataset(
+            [s(0),  s(1),  s(2)],
+            [s(10), s(11), s(12)],
+            [s(20), s(21), s(22)]
+        )
+        dataset.select_rows([s(1), s(0), s(1)])
+        dataset.select_rows([s(0), s(1), s(1)])
+        self.assertEqual(
+            dataset.reveal(),
+            [
+                [20, 21, 22]
+            ]
+        )
+
 
 def reveal(secret):
     return mpc.run(mpc.output(secret))
