@@ -6,6 +6,12 @@ s = mpc.SecInt()
 
 
 class ObliviousDatasetTest(unittest.TestCase):
+    def test_initialize_with_list(self):
+        self.assertEquals(
+            ObliviousDataset([1, 2], [3, 4]),
+            ObliviousDataset([[1, 2], [3, 4]])
+        )
+
     def test_column(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
