@@ -7,7 +7,7 @@ s = mpc.SecInt()
 
 class ObliviousDatasetTest(unittest.TestCase):
     def test_initialize_with_list(self):
-        self.assertEquals(
+        self.assertEqual(
             ObliviousDataset([1, 2], [3, 4]),
             ObliviousDataset([[1, 2], [3, 4]])
         )
@@ -18,9 +18,9 @@ class ObliviousDatasetTest(unittest.TestCase):
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
         )
-        self.assertEquals(reveal(dataset.column(s(0))), [0, 10, 20])
-        self.assertEquals(reveal(dataset.column(s(1))), [1, 11, 21])
-        self.assertEquals(reveal(dataset.column(s(2))), [2, 12, 22])
+        self.assertEqual(reveal(dataset.column(s(0))), [0, 10, 20])
+        self.assertEqual(reveal(dataset.column(s(1))), [1, 11, 21])
+        self.assertEqual(reveal(dataset.column(s(2))), [2, 12, 22])
 
     def test_all_rows_are_active(self):
         dataset = ObliviousDataset(
