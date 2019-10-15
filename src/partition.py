@@ -1,8 +1,9 @@
 from mpyc.runtime import mpc
+from src.dataset import ObliviousDataset
 
 
 def partition_on(samples, is_active, attribute_index, threshold):
-    selected_attribute = get_column(samples, attribute_index)
+    selected_attribute = ObliviousDataset(*samples).column(attribute_index)
 
     left = [value <= threshold for value in selected_attribute]
     right = [(1 - l) for l in left]
@@ -15,9 +16,3 @@ def partition_on(samples, is_active, attribute_index, threshold):
 
 def zero_if_inactive(values, is_active):
     return mpc.schur_prod(values, is_active)
-
-
-def get_column(samples, attribute_index):
-    num_attributes = len(samples[0])
-    is_selected = [i == attribute_index for i in range(num_attributes)]
-    return mpc.matrix_prod([is_selected], samples, True)[0]
