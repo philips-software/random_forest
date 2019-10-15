@@ -19,33 +19,37 @@ def select_best_attribute(samples, outcomes):
 
     Attribute values and outcomes are expected to be either 0 or 1.
     """
-    aggregates = calculate_aggregates(samples, outcomes)
-    gains = map(Aggregation.gini_gain_quotient, aggregates)
+    gains = calculate_gains(samples, outcomes)
     gains = [(numerator, avoid_zero(denominator))
              for (numerator, denominator) in gains]
     return index_of_maximum(*gains)
 
 
-def calculate_aggregates(samples, outcomes):
+def calculate_gains(samples, outcomes):
     if len(samples) == 0:
         raise ValueError("Expected at least one sample")
 
-    number_of_samples = len(samples)
     number_of_attributes = len(samples[0])
 
-    aggregates = []
-
+    gains = []
     for column in range(number_of_attributes):
-        aggregation = Aggregation(total=number_of_samples)
-        aggregates.append(aggregation)
-        for row in range(number_of_samples):
-            value = samples[row][column]
-            outcome = outcomes[row]
-            aggregation.right_total += value
-            aggregation.left_amount_classified_one += (1 - value) * outcome
-            aggregation.right_amount_classified_one += value * outcome
+        gain = calculate_gain_for_attribute(samples, column, outcomes)
+        gains.append(gain)
 
-    return aggregates
+    return gains
+
+
+def calculate_gain_for_attribute(samples, column, outcomes):
+    number_of_samples = len(samples)
+    aggregation = Aggregation(total=number_of_samples)
+    for row in range(number_of_samples):
+        value = samples[row][column]
+        outcome = outcomes[row]
+        aggregation.right_total += value
+        aggregation.left_amount_classified_one += (1 - value) * outcome
+        aggregation.right_amount_classified_one += value * outcome
+
+    return aggregation.gini_gain_quotient()
 
 
 @dataclass
