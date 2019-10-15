@@ -1,6 +1,7 @@
 import unittest
 from mpyc.runtime import mpc
 from src.partition import partition_on
+from src.dataset import ObliviousDataset
 
 s = mpc.SecInt()
 output = mpc.output
@@ -9,11 +10,11 @@ run = mpc.run
 
 class PartitionTests(unittest.TestCase):
     def test_partition_on(self):
-        samples = [
+        samples = ObliviousDataset(
             [s(0), s(1), s(1), s(0)],
             [s(1), s(0), s(1), s(1)],
             [s(0), s(0), s(0), s(1)],
-        ]
+        )
         is_active = [s(1), s(1), s(1)]
         best_attribute = s(2)
         best_attribute_value = s(0)
@@ -23,11 +24,11 @@ class PartitionTests(unittest.TestCase):
         self.assertEqual(run(output(right_active)), [1, 1, 0])
 
     def test_partition_on_partial_dataset(self):
-        samples = [
+        samples = ObliviousDataset(
             [s(0), s(1), s(1), s(0)],
             [s(1), s(0), s(1), s(1)],
             [s(0), s(0), s(0), s(1)],
-        ]
+        )
         is_active = [s(1), s(0), s(0)]
         best_attribute = s(2)
         best_attribute_value = s(0)
