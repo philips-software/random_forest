@@ -1,6 +1,7 @@
 import unittest
-import src.dataset
+from src.dataset import ObliviousDataset
 from mpyc.runtime import mpc
+from src.output import output
 
 s = mpc.SecInt()
 
@@ -29,7 +30,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             [s(20), s(21), s(22)]
         )
         self.assertEqual(
-            dataset.reveal(),
+            reveal(dataset),
             [
                 [0,  1,  2],
                 [10, 11, 12],
@@ -45,8 +46,9 @@ class ObliviousDatasetTest(unittest.TestCase):
         )
         dataset.select_rows([s(0), s(0), s(0)])
         self.assertEqual(
-            dataset.reveal(),
-            [])
+            reveal(dataset),
+            []
+        )
 
     def test_select_rows(self):
         dataset = ObliviousDataset(
@@ -56,7 +58,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         )
         dataset.select_rows([s(1), s(0), s(1)])
         self.assertEqual(
-            dataset.reveal(),
+            reveal(dataset),
             [
                 [0,  1,  2],
                 [20, 21, 22]
@@ -72,7 +74,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         dataset.select_rows([s(1), s(0), s(1)])
         dataset.select_rows([s(0), s(1), s(1)])
         self.assertEqual(
-            dataset.reveal(),
+            reveal(dataset),
             [
                 [20, 21, 22]
             ]
@@ -80,11 +82,4 @@ class ObliviousDatasetTest(unittest.TestCase):
 
 
 def reveal(secret):
-    return mpc.run(mpc.output(secret))
-
-
-class ObliviousDataset(src.dataset.ObliviousDataset):
-    def reveal(self):
-        rows = list(map(reveal, self.rows))
-        active = reveal(self.active_rows)
-        return [rows[i] for i in range(len(rows)) if active[i]]
+    return mpc.run(output(secret))

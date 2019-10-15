@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
+from src.output import Secret
 
 
 @dataclass
-class ObliviousDataset:
+class ObliviousDataset(Secret):
     rows: [[Any]]
     active_rows: [Any]
 
@@ -26,3 +27,8 @@ class ObliviousDataset:
 
     def __eq__(self, other):
         return list(self.rows) == list(other.rows)
+
+    async def output(self):
+        rows = [await mpc.output(row) for row in self.rows]
+        active = await mpc.output(self.active_rows)
+        return [rows[i] for i in range(len(rows)) if active[i]]
