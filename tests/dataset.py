@@ -22,7 +22,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(reveal(dataset.column(s(1))), [1, 11, 21])
         self.assertEqual(reveal(dataset.column(s(2))), [2, 12, 22])
 
-    def test_all_rows_are_active(self):
+    def test_reveal_all_rows(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
             [s(10), s(11), s(12)],
@@ -37,13 +37,13 @@ class ObliviousDatasetTest(unittest.TestCase):
             ]
         )
 
-    def test_no_rows_are_active(self):
+    def test_select_no_rows(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
         )
-        dataset.active_rows = [s(0), s(0), s(0)]
+        dataset.select_rows([s(0), s(0), s(0)])
         self.assertEqual(
             dataset.reveal(),
             [])
@@ -54,8 +54,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
         )
-        active_rows = [s(1), s(0), s(1)]
-        dataset.select_rows(active_rows)
+        dataset.select_rows([s(1), s(0), s(1)])
         self.assertEqual(
             dataset.reveal(),
             [
