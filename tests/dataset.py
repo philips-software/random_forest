@@ -85,14 +85,6 @@ def reveal(secret):
 
 class ObliviousDataset(src.dataset.ObliviousDataset):
     def reveal(self):
-        all_rows = list(map(reveal, self.rows))
-        active_rows = reveal(self.active_rows)
-        return list(map(
-            first,
-            filter(
-                second,
-                zip(all_rows, active_rows))))
-
-
-def first(pair): return pair[0]
-def second(pair): return pair[1]
+        rows = list(map(reveal, self.rows))
+        active = reveal(self.active_rows)
+        return [rows[i] for i in range(len(rows)) if active[i]]
