@@ -6,6 +6,7 @@ from mpyc.runtime import mpc
 @dataclass
 class ObliviousDataset:
     rows: [[Any]]
+    active_rows: [Any]
 
     def __init__(self, *matrix_or_rows):
         if len(matrix_or_rows) == 1:
@@ -14,6 +15,7 @@ class ObliviousDataset:
             self.rows = matrix_or_rows
         self.number_of_rows = len(self.rows)
         self.number_of_columns = len(self.rows[0])
+        self.active_rows = [mpc.SecInt()(1) for _ in self.rows]
 
     def column(self, index):
         is_selected = [i == index for i in range(self.number_of_columns)]
