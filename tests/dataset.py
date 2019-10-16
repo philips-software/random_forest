@@ -38,25 +38,23 @@ class ObliviousDatasetTest(unittest.TestCase):
             ]
         )
 
-    def test_select_no_rows(self):
+    def test_empty_subset(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
-        )
-        dataset.select_rows([s(0), s(0), s(0)])
+        ).subset([s(0), s(0), s(0)])
         self.assertEqual(
             reveal(dataset),
             []
         )
 
-    def test_select_rows(self):
+    def test_subset(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
-        )
-        dataset.select_rows([s(1), s(0), s(1)])
+        ).subset([s(1), s(0), s(1)])
         self.assertEqual(
             reveal(dataset),
             [
@@ -65,14 +63,14 @@ class ObliviousDatasetTest(unittest.TestCase):
             ]
         )
 
-    def test_select_rows_twice(self):
+    def test_subset_of_subset(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
             [s(10), s(11), s(12)],
             [s(20), s(21), s(22)]
-        )
-        dataset.select_rows([s(1), s(0), s(1)])
-        dataset.select_rows([s(0), s(1), s(1)])
+        ) \
+            .subset([s(1), s(0), s(1)]) \
+            .subset([s(0), s(1), s(1)])
         self.assertEqual(
             reveal(dataset),
             [

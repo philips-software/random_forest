@@ -9,26 +9,31 @@ class ObliviousDataset(Secret):
     rows: [[Any]]
     active_rows: [Any]
 
-    def __init__(self, *matrix_or_rows):
-        if len(matrix_or_rows) == 1:
-            self.rows = matrix_or_rows[0]
+    def __init__(self, *rows, active_rows=None):
+        if len(rows) == 1:
+            self.rows = rows[0]
         else:
-            self.rows = matrix_or_rows
-        self.number_of_rows = len(self.rows)
-        self.number_of_columns = len(self.rows[0])
-        self.active_rows = [mpc.SecInt()(1) for _ in self.rows]
+            self.rows = rows
+        self.active_rows = active_rows
 
     def column(self, index):
-        is_selected = [i == index for i in range(self.number_of_columns)]
+        number_of_columns = len(self.rows[0])
+        is_selected = [i == index for i in range(number_of_columns)]
         return mpc.matrix_prod([is_selected], self.rows, True)[0]
 
-    def select_rows(self, active_rows):
-        self.active_rows = mpc.schur_prod(self.active_rows, active_rows)
+    def subset(self, active_rows):
+        subset_rows = active_rows
+        if self.active_rows:
+            subset_rows = mpc.schur_prod(subset_rows, self.active_rows)
+        return ObliviousDataset(self.rows, active_rows=subset_rows)
 
     def __eq__(self, other):
         return list(self.rows) == list(other.rows)
 
     async def output(self):
         rows = [await mpc.output(row) for row in self.rows]
-        active = await mpc.output(self.active_rows)
+        if self.active_rows:
+            active = await mpc.output(self.active_rows)
+        else:
+            active = [True] * len(rows)
         return [rows[i] for i in range(len(rows)) if active[i]]
