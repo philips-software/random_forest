@@ -1,3 +1,4 @@
+from collections import Sequence
 from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
@@ -10,7 +11,7 @@ class ObliviousDataset(Secret):
     active_rows: [Any]
 
     def __init__(self, *rows, active_rows=None):
-        if len(rows) == 1:
+        if len(rows) == 1 and isinstance(rows[0][0], Sequence):
             self.rows = rows[0]
         else:
             self.rows = rows

@@ -12,6 +12,10 @@ class ObliviousDatasetTest(unittest.TestCase):
             ObliviousDataset([1, 2], [3, 4]),
             ObliviousDataset([[1, 2], [3, 4]])
         )
+        self.assertEqual(
+            ObliviousDataset([1, 2]),
+            ObliviousDataset([[1, 2]])
+        )
 
     def test_column(self):
         dataset = ObliviousDataset(
