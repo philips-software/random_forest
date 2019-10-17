@@ -45,7 +45,7 @@ def calculate_gain_for_attribute(samples, column):
     for row in range(number_of_samples):
         is_active = samples.is_active(row)
         value = samples[row][column]
-        outcome = samples[row].output_value
+        outcome = samples[row].outcome
         aggregation.right_total += (value * is_active)
         aggregation.left_amount_classified_one += (
             (1 - value) * outcome) * is_active

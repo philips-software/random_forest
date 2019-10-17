@@ -10,7 +10,7 @@ s = mpc.SecInt()
 @dataclass
 class Sample(Secret):
     inputs: [Any]
-    output_value: Any
+    outcome: Any
 
     def __getitem__(self, index):
         return self.inputs[index]
