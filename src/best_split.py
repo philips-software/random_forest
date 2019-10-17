@@ -43,11 +43,14 @@ def calculate_gain_for_attribute(samples, column, outcomes):
     number_of_samples = len(samples)
     aggregation = Aggregation(total=number_of_samples)
     for row in range(number_of_samples):
+        is_active = samples.active_rows == None or samples.active_rows[row]
         value = samples[row][column]
         outcome = outcomes[row]
-        aggregation.right_total += value
-        aggregation.left_amount_classified_one += (1 - value) * outcome
-        aggregation.right_amount_classified_one += value * outcome
+        aggregation.right_total += (value * is_active)
+        aggregation.left_amount_classified_one += (
+            (1 - value) * outcome) * is_active
+        aggregation.right_amount_classified_one += (
+            value * outcome) * is_active
 
     return aggregation.gini_gain_quotient()
 
