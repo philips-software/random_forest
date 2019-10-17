@@ -4,6 +4,8 @@ from typing import Any
 from mpyc.runtime import mpc
 from src.output import Secret
 
+s = mpc.SecInt()
+
 
 @dataclass
 class ObliviousDataset(Secret):
@@ -27,6 +29,11 @@ class ObliviousDataset(Secret):
         if self.active_rows:
             subset_rows = mpc.schur_prod(subset_rows, self.active_rows)
         return ObliviousDataset(self.rows, active_rows=subset_rows)
+
+    def is_active(self, row_index):
+        if self.active_rows == None:
+            return s(1)
+        return self.active_rows[row_index]
 
     def __eq__(self, other):
         return list(self.rows) == list(other.rows)

@@ -43,7 +43,7 @@ def calculate_gain_for_attribute(samples, column, outcomes):
     number_of_samples = len(samples)
     aggregation = Aggregation(total=number_of_samples)
     for row in range(number_of_samples):
-        is_active = samples.active_rows == None or samples.active_rows[row]
+        is_active = samples.is_active(row)
         value = samples[row][column]
         outcome = outcomes[row]
         aggregation.right_total += (value * is_active)
