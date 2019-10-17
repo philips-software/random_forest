@@ -48,9 +48,6 @@ class ObliviousDataset(Secret):
             return s(1)
         return self.active_rows[row_index]
 
-    def __eq__(self, other):
-        return list(self.rows) == list(other.rows)
-
     def __len__(self):
         return len(self.rows)
 
