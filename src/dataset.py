@@ -2,25 +2,37 @@ from collections import Sequence
 from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
-from src.output import Secret
+from src.output import Secret, output
 
 s = mpc.SecInt()
 
 
 @dataclass
+class Sample(Secret):
+    inputs: [Any]
+    output_value: Any
+
+    def __getitem__(self, index):
+        return self.inputs[index]
+
+    async def output(self):
+        return await output(list(self.inputs))
+
+
+@dataclass
 class ObliviousDataset(Secret):
-    rows: [[Any]]
+    rows: [Sample]
     active_rows: [Any]
 
     def __init__(self, *rows, active_rows=None):
-        if len(rows) == 1 and isinstance(rows[0][0], Sequence):
+        if len(rows) == 1 and isinstance(rows[0][0], Sample):
             self.rows = rows[0]
         else:
             self.rows = rows
         self.active_rows = active_rows
 
     def column(self, index):
-        number_of_columns = len(self.rows[0])
+        number_of_columns = len(self.rows[0].inputs)
         is_selected = [i == index for i in range(number_of_columns)]
         return mpc.matrix_prod([is_selected], self.rows, True)[0]
 
@@ -45,9 +57,9 @@ class ObliviousDataset(Secret):
         return self.rows[index]
 
     async def output(self):
-        rows = [await mpc.output(row) for row in self.rows]
+        rows = [await output(row) for row in self.rows]
         if self.active_rows:
-            active = await mpc.output(self.active_rows)
+            active = await output(self.active_rows)
         else:
             active = [True] * len(rows)
         return [rows[i] for i in range(len(rows)) if active[i]]
