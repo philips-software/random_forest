@@ -16,7 +16,8 @@ class Sample(Secret):
         return self.inputs[index]
 
     async def output(self):
-        return await output(list(self.inputs))
+        return Sample(await output(list(self.inputs)),
+                      await output(self.outcome))
 
 
 @dataclass

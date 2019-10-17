@@ -7,18 +7,18 @@ s = mpc.SecInt()
 
 
 def sample(*inputs):
-    return Sample(inputs, 0)
+    return Sample(inputs, s(0))
 
 
 class ObliviousDatasetTest(unittest.TestCase):
     def test_initialize_with_list(self):
         self.assertEqual(
-            ObliviousDataset(sample(1, 2), sample(3, 4)),
-            ObliviousDataset([sample(1, 2), sample(3, 4)])
+            reveal(ObliviousDataset(sample(s(1), s(2)), sample(s(3), s(4)))),
+            reveal(ObliviousDataset([sample(s(1), s(2)), sample(s(3), s(4))]))
         )
         self.assertEqual(
-            ObliviousDataset(sample(1, 2)),
-            ObliviousDataset([sample(1, 2)])
+            reveal(ObliviousDataset(sample(s(1), s(2)))),
+            reveal(ObliviousDataset([sample(s(1), s(2))]))
         )
 
     def test_len(self):
@@ -27,9 +27,9 @@ class ObliviousDatasetTest(unittest.TestCase):
             [sample(0), sample(1), sample(2)])), 3)
 
     def test_row_indexing(self):
-        data = ObliviousDataset(sample(0, 1), sample(2, 3))
-        self.assertEqual(data[0], sample(0, 1))
-        self.assertEqual(data[1], sample(2, 3))
+        data = ObliviousDataset(sample(s(0), s(1)), sample(s(2), s(3)))
+        self.assertEqual(reveal(data[0]), Sample([0, 1], 0))
+        self.assertEqual(reveal(data[1]), Sample([2, 3], 0))
 
     def test_column(self):
         dataset = ObliviousDataset(
@@ -50,9 +50,9 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(
             reveal(dataset),
             [
-                [0,  1,  2],
-                [10, 11, 12],
-                [20, 21, 22]
+                Sample([0,  1,  2], 0),
+                Sample([10, 11, 12], 0),
+                Sample([20, 21, 22], 0)
             ]
         )
 
@@ -76,8 +76,8 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(
             reveal(dataset),
             [
-                [0,  1,  2],
-                [20, 21, 22]
+                Sample([0,  1,  2], 0),
+                Sample([20, 21, 22], 0)
             ]
         )
 
@@ -92,7 +92,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(
             reveal(dataset),
             [
-                [20, 21, 22]
+                Sample([20, 21, 22], 0)
             ]
         )
 

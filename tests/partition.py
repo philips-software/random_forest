@@ -9,7 +9,7 @@ run = mpc.run
 
 
 def sample(*inputs):
-    return Sample(inputs, 0)
+    return Sample(inputs, s(0))
 
 
 class PartitionTests(unittest.TestCase):
@@ -23,14 +23,14 @@ class PartitionTests(unittest.TestCase):
         self.assertEqual(
             run(output(left)),
             [
-                [0, 0, 0, 1]
+                Sample([0, 0, 0, 1], 0)
             ]
         )
         self.assertEqual(
             run(output(right)),
             [
-                [0, 1, 1, 0],
-                [1, 0, 1, 1]
+                Sample([0, 1, 1, 0], 0),
+                Sample([1, 0, 1, 1], 0)
             ]
         )
 
@@ -42,4 +42,4 @@ class PartitionTests(unittest.TestCase):
         ).subset([s(1), s(0), s(0)])
         left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
         self.assertEqual(run(output(left)), [])
-        self.assertEqual(run(output(right)), [[0, 1, 1, 0]])
+        self.assertEqual(run(output(right)), [Sample([0, 1, 1, 0], 0)])
