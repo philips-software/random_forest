@@ -31,6 +31,9 @@ class ObliviousDataset(Secret):
     def __eq__(self, other):
         return list(self.rows) == list(other.rows)
 
+    def __len__(self):
+        return len(self.rows)
+
     async def output(self):
         rows = [await mpc.output(row) for row in self.rows]
         if self.active_rows:

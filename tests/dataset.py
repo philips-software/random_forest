@@ -17,6 +17,10 @@ class ObliviousDatasetTest(unittest.TestCase):
             ObliviousDataset([[1, 2]])
         )
 
+    def test_len(self):
+        self.assertEqual(len(ObliviousDataset()), 0)
+        self.assertEqual(len(ObliviousDataset([[0], [1], [2]])), 3)
+
     def test_column(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],
