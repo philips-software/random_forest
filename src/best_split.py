@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
-def select_best_attribute(samples, outcomes):
+def select_best_attribute(samples):
     """
     Selects the best attribute for splitting a dataset.
     This is based on which attribute would yield the highest Gini gain.
@@ -19,13 +19,13 @@ def select_best_attribute(samples, outcomes):
 
     Attribute values and outcomes are expected to be either 0 or 1.
     """
-    gains = calculate_gains(samples, outcomes)
+    gains = calculate_gains(samples)
     gains = [(numerator, avoid_zero(denominator))
              for (numerator, denominator) in gains]
     return index_of_maximum(*gains)
 
 
-def calculate_gains(samples, outcomes):
+def calculate_gains(samples):
     if len(samples) == 0:
         raise ValueError("Expected at least one sample")
 
@@ -33,19 +33,19 @@ def calculate_gains(samples, outcomes):
 
     gains = []
     for column in range(number_of_attributes):
-        gain = calculate_gain_for_attribute(samples, column, outcomes)
+        gain = calculate_gain_for_attribute(samples, column)
         gains.append(gain)
 
     return gains
 
 
-def calculate_gain_for_attribute(samples, column, outcomes):
+def calculate_gain_for_attribute(samples, column):
     number_of_samples = len(samples)
     aggregation = Aggregation(total=number_of_samples)
     for row in range(number_of_samples):
         is_active = samples.is_active(row)
         value = samples[row][column]
-        outcome = outcomes[row]
+        outcome = samples[row].output_value
         aggregation.right_total += (value * is_active)
         aggregation.left_amount_classified_one += (
             (1 - value) * outcome) * is_active
