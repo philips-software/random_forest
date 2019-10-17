@@ -21,6 +21,11 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(len(ObliviousDataset()), 0)
         self.assertEqual(len(ObliviousDataset([[0], [1], [2]])), 3)
 
+    def test_row_indexing(self):
+        data = ObliviousDataset([[0, 1], [2, 3]])
+        self.assertEqual(data[0], [0, 1])
+        self.assertEqual(data[1], [2, 3])
+
     def test_column(self):
         dataset = ObliviousDataset(
             [s(0),  s(1),  s(2)],

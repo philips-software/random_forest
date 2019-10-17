@@ -34,6 +34,9 @@ class ObliviousDataset(Secret):
     def __len__(self):
         return len(self.rows)
 
+    def __getitem__(self, index):
+        return self.rows[index]
+
     async def output(self):
         rows = [await mpc.output(row) for row in self.rows]
         if self.active_rows:
