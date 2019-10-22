@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
 from src.output import Secret, output
+from functools import reduce
+import operator
 
 
 @dataclass
@@ -19,6 +21,21 @@ class ObliviousArray(Secret):
         else:
             included = mpc.schur_prod(list(self.included), include)
         return ObliviousArray(*self.values, included=included)
+
+    def map(self, function):
+        values = map(function, self.values)
+        return ObliviousArray(*values, included=self.included)
+
+    def reduce(self, neutral_element, operation):
+        values = self.values
+        included = self.included
+        if included:
+            values = [mpc.if_else(included[i], values[i], neutral_element)
+                      for i in range(len(self.values))]
+        return reduce(operation, values, neutral_element)
+
+    def sum(self):
+        return self.reduce(0, operator.add)
 
     def __getitem__(self, index):
         is_selected = [i == index for i in range(len(self.values))]
