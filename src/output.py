@@ -1,5 +1,5 @@
 import abc
-from collections import Sequence
+from collections.abc import Sequence
 from mpyc.runtime import mpc
 
 
