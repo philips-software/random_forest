@@ -11,16 +11,6 @@ def sample(*inputs):
 
 
 class ObliviousDatasetTest(unittest.TestCase):
-    def test_initialize_with_list(self):
-        self.assertEqual(
-            reveal(ObliviousDataset(sample(s(1), s(2)), sample(s(3), s(4)))),
-            reveal(ObliviousDataset([sample(s(1), s(2)), sample(s(3), s(4))]))
-        )
-        self.assertEqual(
-            reveal(ObliviousDataset(sample(s(1), s(2)))),
-            reveal(ObliviousDataset([sample(s(1), s(2))]))
-        )
-
     def test_len(self):
         self.assertEqual(len(ObliviousDataset()), 0)
         self.assertEqual(len(ObliviousDataset(
@@ -40,61 +30,6 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(reveal(dataset.column(s(0))), [0, 10, 20])
         self.assertEqual(reveal(dataset.column(s(1))), [1, 11, 21])
         self.assertEqual(reveal(dataset.column(s(2))), [2, 12, 22])
-
-    def test_reveal_all_rows(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2)),
-            sample(s(10), s(11), s(12)),
-            sample(s(20), s(21), s(22))
-        )
-        self.assertEqual(
-            reveal(dataset),
-            [
-                Sample([0,  1,  2], 0),
-                Sample([10, 11, 12], 0),
-                Sample([20, 21, 22], 0)
-            ]
-        )
-
-    def test_empty_subset(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2)),
-            sample(s(10), s(11), s(12)),
-            sample(s(20), s(21), s(22))
-        ).select([s(0), s(0), s(0)])
-        self.assertEqual(
-            reveal(dataset),
-            []
-        )
-
-    def test_subset(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2)),
-            sample(s(10), s(11), s(12)),
-            sample(s(20), s(21), s(22))
-        ).select([s(1), s(0), s(1)])
-        self.assertEqual(
-            reveal(dataset),
-            [
-                Sample([0,  1,  2], 0),
-                Sample([20, 21, 22], 0)
-            ]
-        )
-
-    def test_subset_of_subset(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2)),
-            sample(s(10), s(11), s(12)),
-            sample(s(20), s(21), s(22))
-        ) \
-            .select([s(1), s(0), s(1)]) \
-            .select([s(0), s(1), s(1)])
-        self.assertEqual(
-            reveal(dataset),
-            [
-                Sample([20, 21, 22], 0)
-            ]
-        )
 
     def test_column_of_subset(self):
         dataset = ObliviousDataset(
