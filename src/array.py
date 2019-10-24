@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Sequence
 from mpyc.runtime import mpc
 from src.output import Secret, output
 from functools import reduce
@@ -12,6 +12,8 @@ class ObliviousArray(Secret):
     included: [Any]
 
     def __init__(self, *values, included=None):
+        if len(values) == 1 and isinstance(values[0], Sequence):
+            values = values[0]
         self.values = values
         self.included = included
 

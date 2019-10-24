@@ -8,6 +8,17 @@ s = mpc.SecInt()
 
 
 class ObliviousArrayTest(unittest.TestCase):
+
+    def test_initialize_with_list(self):
+        self.assertEqual(
+            reveal(ObliviousArray(s(1), s(2))),
+            reveal(ObliviousArray([s(1), s(2)]))
+        )
+        self.assertEqual(
+            reveal(ObliviousArray(s(1))),
+            reveal(ObliviousArray([s(1)]))
+        )
+
     def test_oblivious_indexing(self):
         array = ObliviousArray(s(10), s(20), s(30))
         self.assertEqual(reveal(array[s(0)]), 10)
