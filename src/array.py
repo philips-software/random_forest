@@ -18,14 +18,17 @@ class ObliviousArray(Secret):
         self.included = included
 
     def select(self, *include):
-        if len(include) == 1 and isinstance(include[0], ObliviousArray):
-            return self.select(*include[0].included_values_or_zero())
+        if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousArray)):
+            include = include[0]
+
+        if isinstance(include, ObliviousArray):
+            return self.select(*include.included_values_or_zero())
 
         if self.included == None:
-            return ObliviousArray(*self.values, included=include)
+            return type(self)(self.values, included=include)
 
-        included = mpc.schur_prod(list(self.included), include)
-        return ObliviousArray(*self.values, included=included)
+        include = mpc.schur_prod(list(self.included), include)
+        return type(self)(self.values, included=include)
 
     def included_values_or_zero(self):
         if self.included:
