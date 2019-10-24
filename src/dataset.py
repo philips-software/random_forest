@@ -29,9 +29,6 @@ class ObliviousDataset(ObliviousArray):
         values = mpc.matrix_prod([is_selected], self.values, True)[0]
         return ObliviousArray(*values, included=self.included)
 
-    def subset(self, *include):
-        return self.select(*include)
-
     def is_active(self, row_index):
         if self.included == None:
             return s(1)

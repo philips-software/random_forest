@@ -21,4 +21,4 @@ def partition_on(samples, attribute_index, threshold):
     left = selected_attribute.map(lambda value: value <= threshold)
     right = left.map(lambda value: 1 - value)
 
-    return samples.subset(left), samples.subset(right)
+    return samples.select(left), samples.select(right)

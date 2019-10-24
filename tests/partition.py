@@ -39,7 +39,7 @@ class PartitionTests(unittest.TestCase):
             sample(s(0), s(1), s(1), s(0)),
             sample(s(1), s(0), s(1), s(1)),
             sample(s(0), s(0), s(0), s(1))
-        ).subset([s(1), s(0), s(0)])
+        ).select([s(1), s(0), s(0)])
         left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
         self.assertEqual(run(output(left)), [])
         self.assertEqual(run(output(right)), [Sample([0, 1, 1, 0], 0)])

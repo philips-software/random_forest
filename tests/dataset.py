@@ -61,7 +61,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),
             sample(s(20), s(21), s(22))
-        ).subset([s(0), s(0), s(0)])
+        ).select([s(0), s(0), s(0)])
         self.assertEqual(
             reveal(dataset),
             []
@@ -72,7 +72,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),
             sample(s(20), s(21), s(22))
-        ).subset([s(1), s(0), s(1)])
+        ).select([s(1), s(0), s(1)])
         self.assertEqual(
             reveal(dataset),
             [
@@ -87,8 +87,8 @@ class ObliviousDatasetTest(unittest.TestCase):
             sample(s(10), s(11), s(12)),
             sample(s(20), s(21), s(22))
         ) \
-            .subset([s(1), s(0), s(1)]) \
-            .subset([s(0), s(1), s(1)])
+            .select([s(1), s(0), s(1)]) \
+            .select([s(0), s(1), s(1)])
         self.assertEqual(
             reveal(dataset),
             [
@@ -101,7 +101,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),
             sample(s(20), s(21), s(22))
-        ).subset([s(1), s(0), s(1)])
+        ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.column(s(1))), [1, 21])
 
     def test_is_active(self):
@@ -115,7 +115,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),
             sample(s(20), s(21), s(22))
-        ).subset([s(1), s(0), s(1)])
+        ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.is_active(0)), True)
         self.assertEqual(reveal(dataset.is_active(1)), False)
 

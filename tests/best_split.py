@@ -37,6 +37,6 @@ class AttributeTests(unittest.TestCase):
             Sample([s(1), s(0), s(1), s(1)], s(1)),
             Sample([s(42), s(43), s(44), s(45)], s(46)),
             Sample([s(0), s(0), s(0), s(1)], s(0)),
-        ).subset([s(0), s(1), s(0), s(1)])
+        ).select([s(0), s(1), s(0), s(1)])
         best_attribute = select_best_attribute(samples)
         self.assertEqual(run(output(best_attribute)), 2)
