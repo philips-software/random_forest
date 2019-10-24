@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
 from src.output import Secret, output
+from src.array import ObliviousArray
 
 s = mpc.SecInt()
 
@@ -35,9 +36,14 @@ class ObliviousDataset(Secret):
     def column(self, index):
         number_of_columns = len(self.rows[0].inputs)
         is_selected = [i == index for i in range(number_of_columns)]
-        return mpc.matrix_prod([is_selected], self.rows, True)[0]
+        values = mpc.matrix_prod([is_selected], self.rows, True)[0]
+        return ObliviousArray(*values, included=self.active_rows)
 
     def subset(self, active_rows):
+
+        if isinstance(active_rows, ObliviousArray):
+            active_rows = list(active_rows.values)
+
         subset_rows = active_rows
         if self.active_rows:
             subset_rows = mpc.schur_prod(subset_rows, self.active_rows)

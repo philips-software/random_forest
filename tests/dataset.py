@@ -96,6 +96,14 @@ class ObliviousDatasetTest(unittest.TestCase):
             ]
         )
 
+    def test_column_of_subset(self):
+        dataset = ObliviousDataset(
+            sample(s(0),  s(1),  s(2)),
+            sample(s(10), s(11), s(12)),
+            sample(s(20), s(21), s(22))
+        ).subset([s(1), s(0), s(1)])
+        self.assertEqual(reveal(dataset.column(s(1))), [1, 21])
+
     def test_is_active(self):
         dataset = ObliviousDataset(
             sample(s(0),  s(1),  s(2))
