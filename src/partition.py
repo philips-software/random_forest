@@ -22,7 +22,3 @@ def partition_on(samples, attribute_index, threshold):
     right = left.map(lambda value: 1 - value)
 
     return samples.subset(left), samples.subset(right)
-
-
-def zero_if_inactive(values, is_active):
-    return mpc.schur_prod(values, is_active)
