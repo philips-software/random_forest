@@ -18,11 +18,20 @@ class ObliviousArray(Secret):
         self.included = included
 
     def select(self, *include):
+        if len(include) == 1 and isinstance(include[0], ObliviousArray):
+            return self.select(*include[0].included_values_or_zero())
+
         if self.included == None:
-            included = include
-        else:
-            included = mpc.schur_prod(list(self.included), include)
+            return ObliviousArray(*self.values, included=include)
+
+        included = mpc.schur_prod(list(self.included), include)
         return ObliviousArray(*self.values, included=included)
+
+    def included_values_or_zero(self):
+        if self.included:
+            return mpc.schur_prod(list(self.values), self.included)
+        else:
+            return self.values
 
     def map(self, function):
         values = map(function, self.values)

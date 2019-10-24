@@ -40,6 +40,19 @@ class ObliviousArrayTest(unittest.TestCase):
         array = array.select(s(0), s(1), s(1))
         self.assertEqual(reveal(array), [30])
 
+    def test_select_with_oblivious_array_argument(self):
+        array = ObliviousArray(s(10), s(20), s(30))
+        included = ObliviousArray(s(1), s(0), s(1))
+        array = array.select(included)
+        self.assertEqual(reveal(array), [10, 30])
+
+    def test_select_with_selection_as_argument(self):
+        array = ObliviousArray(s(10), s(20), s(30))
+        included = ObliviousArray(s(1), s(0), s(1))
+        included = included.select(s(0), s(0), s(1))
+        array = array.select(included)
+        self.assertEqual(reveal(array), [30])
+
     def test_map(self):
         array = ObliviousArray(s(10), s(20), s(30))
         array = array.map(lambda x: 2 * x)
