@@ -55,7 +55,7 @@ class ObliviousArray(Secret):
         is_selected = [i == index for i in range(len(self.values))]
         return mpc.matrix_prod([is_selected], [self.values], True)[0][0]
 
-    async def output(self):
+    async def __output__(self):
         values = [await output(value) for value in self.values]
         if self.included:
             included = await output(self.included)

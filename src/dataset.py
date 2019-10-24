@@ -16,7 +16,7 @@ class Sample(Secret):
     def __getitem__(self, index):
         return self.inputs[index]
 
-    async def output(self):
+    async def __output__(self):
         return Sample(await output(self.inputs),
                       await output(self.outcome))
 

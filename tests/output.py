@@ -11,7 +11,7 @@ class OutputTest(unittest.TestCase):
 
     def test_output_secret(self):
         class SomeSecret(Secret):
-            async def output(self):
+            async def __output__(self):
                 return 42
 
         self.assertEqual(mpc.run(output(SomeSecret())), 42)
