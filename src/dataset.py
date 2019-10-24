@@ -21,17 +21,7 @@ class Sample(Secret):
                       await output(self.outcome))
 
 
-@dataclass
-class ObliviousDataset(Secret):
-    values: [Sample]
-    included: [Any]
-
-    def __init__(self, *values, included=None):
-        if len(values) == 1 and isinstance(values[0][0], Sample):
-            self.values = values[0]
-        else:
-            self.values = values
-        self.included = included
+class ObliviousDataset(ObliviousArray):
 
     def column(self, index):
         number_of_columns = len(self.values[0].inputs)
@@ -59,11 +49,3 @@ class ObliviousDataset(Secret):
 
     def __getitem__(self, index):
         return self.values[index]
-
-    async def output(self):
-        values = [await output(row) for row in self.values]
-        if self.included:
-            active = await output(self.included)
-        else:
-            active = [True] * len(values)
-        return [values[i] for i in range(len(values)) if active[i]]
