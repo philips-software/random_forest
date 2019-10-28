@@ -21,7 +21,25 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(reveal(data[0]), Sample([0, 1], 0))
         self.assertEqual(reveal(data[1]), Sample([2, 3], 0))
 
-    def test_column(self):
+    def test_column_with_public_index(self):
+        dataset = ObliviousDataset(
+            sample(s(0),  s(1),  s(2)),
+            sample(s(10), s(11), s(12)),
+            sample(s(20), s(21), s(22))
+        )
+        self.assertEqual(reveal(dataset.column(0)), [0, 10, 20])
+        self.assertEqual(reveal(dataset.column(1)), [1, 11, 21])
+        self.assertEqual(reveal(dataset.column(2)), [2, 12, 22])
+
+    def test_column_of_subset_with_public_index(self):
+        dataset = ObliviousDataset(
+            sample(s(0),  s(1),  s(2)),
+            sample(s(10), s(11), s(12)),
+            sample(s(20), s(21), s(22))
+        ).select([s(1), s(0), s(1)])
+        self.assertEqual(reveal(dataset.column(1)), [1, 21])
+
+    def test_column_with_secret_index(self):
         dataset = ObliviousDataset(
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),
@@ -31,7 +49,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertEqual(reveal(dataset.column(s(1))), [1, 11, 21])
         self.assertEqual(reveal(dataset.column(s(2))), [2, 12, 22])
 
-    def test_column_of_subset(self):
+    def test_column_of_subset_with_secret_index(self):
         dataset = ObliviousDataset(
             sample(s(0),  s(1),  s(2)),
             sample(s(10), s(11), s(12)),

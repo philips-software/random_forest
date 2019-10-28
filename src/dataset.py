@@ -2,6 +2,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
+from mpyc.sectypes import Share
 from src.output import Secret, output
 from src.array import ObliviousArray
 
@@ -24,10 +25,14 @@ class Sample(Secret):
 class ObliviousDataset(ObliviousArray):
 
     def column(self, index):
-        number_of_columns = len(self.values[0].inputs)
-        is_selected = [i == index for i in range(number_of_columns)]
-        values = mpc.matrix_prod([is_selected], self.values, True)[0]
-        return ObliviousArray(*values, included=self.included)
+        if isinstance(index, Share):
+            number_of_columns = len(self.values[0].inputs)
+            is_selected = [i == index for i in range(number_of_columns)]
+            values = mpc.matrix_prod([is_selected], self.values, True)[0]
+            return ObliviousArray(*values, included=self.included)
+        else:
+            values = [row[index] for row in self]
+            return ObliviousArray(*values, included=self.included)
 
     def is_active(self, row_index):
         if self.included == None:
