@@ -65,21 +65,6 @@ class ObliviousDatasetTest(unittest.TestCase):
         ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.outcomes), [60, 80])
 
-    def test_is_active(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2))
-        )
-        self.assertEqual(reveal(dataset.is_active(0)), True)
-
-    def test_is_active_with_subset(self):
-        dataset = ObliviousDataset(
-            sample(s(0),  s(1),  s(2)),
-            sample(s(10), s(11), s(12)),
-            sample(s(20), s(21), s(22))
-        ).select([s(1), s(0), s(1)])
-        self.assertEqual(reveal(dataset.is_active(0)), True)
-        self.assertEqual(reveal(dataset.is_active(1)), False)
-
 
 def reveal(secret):
     return mpc.run(output(secret))

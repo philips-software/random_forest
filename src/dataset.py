@@ -39,11 +39,6 @@ class ObliviousDataset(ObliviousArray):
         outs = [sample.outcome for sample in self.values]
         return ObliviousArray(*outs, included=self.included)
 
-    def is_active(self, row_index):
-        if self.included == None:
-            return s(1)
-        return self.included[row_index]
-
     def __len__(self):
         return len(self.values)
 
