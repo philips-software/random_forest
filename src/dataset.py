@@ -34,6 +34,11 @@ class ObliviousDataset(ObliviousArray):
             values = [row[index] for row in self]
             return ObliviousArray(*values, included=self.included)
 
+    @property
+    def outcomes(self):
+        outs = [sample.outcome for sample in self.values]
+        return ObliviousArray(*outs, included=self.included)
+
     def is_active(self, row_index):
         if self.included == None:
             return s(1)

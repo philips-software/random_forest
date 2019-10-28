@@ -57,6 +57,14 @@ class ObliviousDatasetTest(unittest.TestCase):
         ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.column(s(1))), [1, 21])
 
+    def test_outcomes(self):
+        dataset = ObliviousDataset(
+            Sample([s(0),  s(1),  s(2)], outcome=s(60)),
+            Sample([s(10), s(11), s(12)], outcome=s(70)),
+            Sample([s(20), s(21), s(22)], outcome=s(80))
+        ).select([s(1), s(0), s(1)])
+        self.assertEqual(reveal(dataset.outcomes), [60, 80])
+
     def test_is_active(self):
         dataset = ObliviousDataset(
             sample(s(0),  s(1),  s(2))
