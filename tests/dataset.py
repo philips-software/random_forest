@@ -12,9 +12,9 @@ def sample(*inputs):
 
 class ObliviousDatasetTest(unittest.TestCase):
     def test_len(self):
-        self.assertEqual(len(ObliviousDataset()), 0)
-        self.assertEqual(len(ObliviousDataset(
-            [sample(0), sample(1), sample(2)])), 3)
+        self.assertEqual(ObliviousDataset().len(), 0)
+        self.assertEqual(ObliviousDataset(
+            [sample(0), sample(1), sample(2)]).len(), 3)
 
     def test_len_of_subset(self):
         dataset = ObliviousDataset(sample(0), sample(1), sample(2))

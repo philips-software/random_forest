@@ -37,15 +37,15 @@ class ObliviousDataset(ObliviousArray):
             return ObliviousArray(*values, included=self.included)
 
     def len(self):
-        return reduce(operator.add, self.included)
+        if self.included:
+            return reduce(operator.add, self.included, s(0))
+        else:
+            return len(self.values)
 
     @property
     def outcomes(self):
         outs = [sample.outcome for sample in self.values]
         return ObliviousArray(*outs, included=self.included)
-
-    def __len__(self):
-        return len(self.values)
 
     def __getitem__(self, index):
         return self.values[index]

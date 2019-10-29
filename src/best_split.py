@@ -37,7 +37,7 @@ def calculate_gains(samples):
 
 
 def calculate_gain_for_attribute(samples, column):
-    aggregation = Aggregation(total=len(samples))
+    aggregation = Aggregation(total=samples.len())
 
     aggregation.right_total = samples.column(column).sum()
 
