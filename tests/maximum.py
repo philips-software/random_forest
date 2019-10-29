@@ -1,7 +1,7 @@
 import unittest
 from mpyc.runtime import mpc
 from src.maximum import index_of_maximum
-from src.output import output
+from tests.reveal import reveal
 
 s = mpc.SecInt()
 
@@ -23,7 +23,3 @@ class MaximumTest(unittest.TestCase):
 
     def test_maximum_with_no_arguments(self):
         self.assertRaises(ValueError, index_of_maximum)
-
-
-def reveal(secret):
-    return mpc.run(output(secret))

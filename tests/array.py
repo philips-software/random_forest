@@ -1,7 +1,7 @@
 import unittest
 from src.array import ObliviousArray
 from mpyc.runtime import mpc
-from src.output import output
+from tests.reveal import reveal
 import operator
 
 s = mpc.SecInt()
@@ -95,7 +95,3 @@ class ObliviousArrayTest(unittest.TestCase):
         array = array.select(s(1), s(0), s(1))
         sum = array.sum()
         self.assertEqual(reveal(sum), 40)
-
-
-def reveal(secret):
-    return mpc.run(output(secret))

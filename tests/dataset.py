@@ -1,7 +1,7 @@
 import unittest
 from src.dataset import ObliviousDataset, Sample
 from mpyc.runtime import mpc
-from src.output import output
+from tests.reveal import reveal
 
 s = mpc.SecInt()
 
@@ -59,7 +59,3 @@ class ObliviousDatasetTest(unittest.TestCase):
             Sample([s(20), s(21), s(22)], outcome=s(80))
         ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.outcomes), [60, 80])
-
-
-def reveal(secret):
-    return mpc.run(output(secret))
