@@ -1,3 +1,8 @@
+from mpyc.runtime import mpc
+
+s = mpc.SecInt()
+
+
 def index_of_maximum(*quotients):
     """
     Returns the index of the maximum in a list of quotients, aka "argmax".
@@ -8,7 +13,7 @@ def index_of_maximum(*quotients):
         raise ValueError('expected at least one quotient')
 
     maximum = quotients[0]
-    result = 0
+    result = s(0)
     for index in range(1, len(quotients)):
         quotient = quotients[index]
         is_new_maximum = ge_quotient(quotient, maximum)
