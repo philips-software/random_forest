@@ -1,11 +1,9 @@
 import unittest
-from mpyc.runtime import mpc
 from src.dataset import ObliviousDataset, Sample
 from src.train import train
 from src.tree import Node
 from tests.reveal import reveal
-
-s = mpc.SecInt()
+from src.secint import secint as s
 
 
 class TrainTests(unittest.TestCase):

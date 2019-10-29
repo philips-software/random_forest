@@ -1,11 +1,9 @@
 import unittest
-from mpyc.runtime import mpc
-from src.output import output
-from src.partition import partition_on
-from src.dataset import ObliviousDataset, Sample
 
-s = mpc.SecInt()
-run = mpc.run
+from src.dataset import ObliviousDataset, Sample
+from src.partition import partition_on
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 def sample(*inputs):
@@ -21,13 +19,13 @@ class PartitionTests(unittest.TestCase):
         )
         left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
         self.assertEqual(
-            run(output(left)),
+            reveal(left),
             [
                 Sample([0, 0, 0, 1], 0)
             ]
         )
         self.assertEqual(
-            run(output(right)),
+            reveal(right),
             [
                 Sample([0, 1, 1, 0], 0),
                 Sample([1, 0, 1, 1], 0)
@@ -41,5 +39,5 @@ class PartitionTests(unittest.TestCase):
             sample(s(0), s(0), s(0), s(1))
         ).select([s(1), s(0), s(0)])
         left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
-        self.assertEqual(run(output(left)), [])
-        self.assertEqual(run(output(right)), [Sample([0, 1, 1, 0], 0)])
+        self.assertEqual(reveal(left), [])
+        self.assertEqual(reveal(right), [Sample([0, 1, 1, 0], 0)])

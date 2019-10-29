@@ -1,11 +1,11 @@
 import unittest
-from mpyc.runtime import mpc
-from src.dataset import ObliviousDataset, Sample
-from src.best_split import select_best_attribute
 
-s = mpc.SecInt()
-output = mpc.output
-run = mpc.run
+from mpyc.runtime import mpc
+
+from src.best_split import select_best_attribute
+from src.dataset import ObliviousDataset, Sample
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 class AttributeTests(unittest.TestCase):
@@ -16,7 +16,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0), s(0), s(0), s(1)], s(0))
         )
         best_attribute = select_best_attribute(samples)
-        self.assertEqual(run(output(best_attribute)), 2)
+        self.assertEqual(reveal(best_attribute), 2)
 
     def test_select_best_attribute_with_gini_denominator_zero(self):
         samples = ObliviousDataset(
@@ -25,7 +25,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0), s(0), s(0), s(0)], s(0))
         )
         best_attribute = select_best_attribute(samples)
-        self.assertEqual(run(output(best_attribute)), 2)
+        self.assertEqual(reveal(best_attribute), 2)
 
     def test_select_best_attribute_using_subset(self):
         samples = ObliviousDataset(
@@ -35,4 +35,4 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0), s(0), s(0), s(1)], s(0)),
         ).select([s(0), s(1), s(0), s(1)])
         best_attribute = select_best_attribute(samples)
-        self.assertEqual(run(output(best_attribute)), 2)
+        self.assertEqual(reveal(best_attribute), 2)

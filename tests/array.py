@@ -1,10 +1,11 @@
-import unittest
-from src.array import ObliviousArray
-from mpyc.runtime import mpc
-from tests.reveal import reveal
 import operator
+import unittest
 
-s = mpc.SecInt()
+from mpyc.runtime import mpc
+
+from src.array import ObliviousArray
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 class ObliviousArrayTest(unittest.TestCase):

@@ -1,17 +1,17 @@
 import unittest
-from mpyc.runtime import mpc
-from src.output import output, Secret
 
-s = mpc.SecInt()
+from src.output import Secret, output
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 class OutputTest(unittest.TestCase):
     def test_output_sec_int(self):
-        self.assertEqual(mpc.run(output(s(42))), 42)
+        self.assertEqual(reveal(s(42)), 42)
 
     def test_output_secret(self):
         class SomeSecret(Secret):
             async def __output__(self):
                 return 42
 
-        self.assertEqual(mpc.run(output(SomeSecret())), 42)
+        self.assertEqual(reveal(SomeSecret()), 42)

@@ -1,9 +1,8 @@
 import unittest
-from src.tree import Node
-from mpyc.runtime import mpc
-from tests.reveal import reveal
 
-s = mpc.SecInt()
+from src.secint import secint as s
+from src.tree import Node
+from tests.reveal import reveal
 
 
 class TreeTest(unittest.TestCase):

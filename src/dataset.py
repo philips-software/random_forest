@@ -1,12 +1,9 @@
-from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 from src.output import Secret, output
 from src.array import ObliviousArray
-from functools import reduce
-import operator
 
 
 @dataclass

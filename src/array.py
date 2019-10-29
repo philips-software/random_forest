@@ -1,11 +1,12 @@
-from dataclasses import dataclass
-from typing import Any, Sequence
-from mpyc.runtime import mpc
-from src.output import Secret, output
-from functools import reduce
 import operator
+from dataclasses import dataclass
+from functools import reduce
+from typing import Any, Sequence
 
-s = mpc.SecInt()
+from mpyc.runtime import mpc
+
+from src.output import Secret, output
+from src.secint import secint as s
 
 
 @dataclass

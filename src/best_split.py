@@ -1,7 +1,7 @@
 from src.gini import gini_gain_quotient, avoid_zero
 from src.maximum import index_of_maximum
 from mpyc.runtime import mpc
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 

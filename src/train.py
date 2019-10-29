@@ -1,8 +1,8 @@
-from src.tree import Node
 from mpyc.runtime import mpc
-from src.best_split import select_best_attribute
 
-s = mpc.SecInt()
+from src.best_split import select_best_attribute
+from src.secint import secint as s
+from src.tree import Node
 
 
 def train(samples):

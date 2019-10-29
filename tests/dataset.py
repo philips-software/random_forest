@@ -1,9 +1,10 @@
 import unittest
-from src.dataset import ObliviousDataset, Sample
-from mpyc.runtime import mpc
-from tests.reveal import reveal
 
-s = mpc.SecInt()
+from mpyc.runtime import mpc
+
+from src.dataset import ObliviousDataset, Sample
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 def sample(*inputs):

@@ -1,6 +1,6 @@
 from mpyc.runtime import mpc
 
-s = mpc.SecInt()
+from src.secint import secint as s
 
 
 def index_of_maximum(*quotients):

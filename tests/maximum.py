@@ -1,9 +1,10 @@
 import unittest
-from mpyc.runtime import mpc
-from src.maximum import index_of_maximum
-from tests.reveal import reveal
 
-s = mpc.SecInt()
+from mpyc.runtime import mpc
+
+from src.maximum import index_of_maximum
+from src.secint import secint as s
+from tests.reveal import reveal
 
 
 class MaximumTest(unittest.TestCase):
