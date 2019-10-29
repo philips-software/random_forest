@@ -1,7 +1,7 @@
 from mpyc.runtime import mpc
 
 
-def partition_on(samples, attribute_index, threshold):
+def partition_continuous(samples, attribute_index, threshold):
     """
     Splits given data set into left and right part based on the
     threshold value of the attribute on which to split. Returns
@@ -24,7 +24,7 @@ def partition_on(samples, attribute_index, threshold):
     return samples.select(left), samples.select(right)
 
 
-def partition_on_binary_attribute(samples, attribute_index):
+def partition_binary(samples, attribute_index):
     selected_attribute = samples.column(attribute_index)
 
     right = selected_attribute

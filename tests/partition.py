@@ -1,7 +1,7 @@
 import unittest
 
 from src.dataset import ObliviousDataset, Sample
-from src.partition import partition_on, partition_on_binary_attribute
+from src.partition import partition_continuous, partition_binary
 from src.secint import secint as s
 from tests.reveal import reveal
 
@@ -11,13 +11,14 @@ def sample(*inputs):
 
 
 class PartitionTests(unittest.TestCase):
-    def test_partition_on(self):
+    def test_partition_on_continuous_attribute(self):
         data = ObliviousDataset(
             sample(s(0), s(1), s(1), s(0)),
             sample(s(1), s(0), s(1), s(1)),
             sample(s(0), s(0), s(0), s(1))
         )
-        left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
+        left, right = partition_continuous(
+            data, attribute_index=s(2), threshold=s(0))
         self.assertEqual(
             reveal(left),
             [
@@ -32,13 +33,14 @@ class PartitionTests(unittest.TestCase):
             ]
         )
 
-    def test_partition_on_partial_dataset(self):
+    def test_partition_on_continuous_attribute_partial_dataset(self):
         data = ObliviousDataset(
             sample(s(0), s(1), s(1), s(0)),
             sample(s(1), s(0), s(1), s(1)),
             sample(s(0), s(0), s(0), s(1))
         ).select([s(1), s(0), s(0)])
-        left, right = partition_on(data, attribute_index=s(2), threshold=s(0))
+        left, right = partition_continuous(
+            data, attribute_index=s(2), threshold=s(0))
         self.assertEqual(reveal(left), [])
         self.assertEqual(reveal(right), [Sample([0, 1, 1, 0], 0)])
 
@@ -48,7 +50,7 @@ class PartitionTests(unittest.TestCase):
             sample(s(1), s(0), s(1), s(1)),
             sample(s(0), s(0), s(0), s(1))
         )
-        left, right = partition_on_binary_attribute(data, attribute_index=s(2))
+        left, right = partition_binary(data, attribute_index=s(2))
         self.assertEqual(
             reveal(left),
             [
