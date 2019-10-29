@@ -5,6 +5,8 @@ from src.output import Secret, output
 from functools import reduce
 import operator
 
+s = mpc.SecInt()
+
 
 @dataclass
 class ObliviousArray(Secret):
@@ -16,6 +18,12 @@ class ObliviousArray(Secret):
             values = values[0]
         self.values = values
         self.included = included
+
+    def len(self):
+        if self.included:
+            return reduce(operator.add, self.included, s(0))
+        else:
+            return len(self.values)
 
     def select(self, *include):
         if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousArray)):

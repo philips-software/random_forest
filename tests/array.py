@@ -19,6 +19,16 @@ class ObliviousArrayTest(unittest.TestCase):
             reveal(ObliviousArray([s(1)]))
         )
 
+    def test_len(self):
+        self.assertEqual(ObliviousArray().len(), 0)
+        self.assertEqual(ObliviousArray(
+            [s(0), s(1), s(2)]).len(), 3)
+
+    def test_len_of_subset(self):
+        dataset = ObliviousArray(s(0), s(1), s(2))
+        dataset = dataset.select(s(1), s(0), s(1))
+        self.assertEqual(reveal(dataset.len()), 2)
+
     def test_oblivious_indexing(self):
         array = ObliviousArray(s(10), s(20), s(30))
         self.assertEqual(reveal(array[s(0)]), 10)

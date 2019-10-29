@@ -8,8 +8,6 @@ from src.array import ObliviousArray
 from functools import reduce
 import operator
 
-s = mpc.SecInt()
-
 
 @dataclass
 class Sample(Secret):
@@ -35,12 +33,6 @@ class ObliviousDataset(ObliviousArray):
         else:
             values = [row[index] for row in self]
             return ObliviousArray(*values, included=self.included)
-
-    def len(self):
-        if self.included:
-            return reduce(operator.add, self.included, s(0))
-        else:
-            return len(self.values)
 
     @property
     def outcomes(self):

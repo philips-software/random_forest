@@ -11,16 +11,6 @@ def sample(*inputs):
 
 
 class ObliviousDatasetTest(unittest.TestCase):
-    def test_len(self):
-        self.assertEqual(ObliviousDataset().len(), 0)
-        self.assertEqual(ObliviousDataset(
-            [sample(0), sample(1), sample(2)]).len(), 3)
-
-    def test_len_of_subset(self):
-        dataset = ObliviousDataset(sample(0), sample(1), sample(2))
-        dataset = dataset.select(s(1), s(0), s(1))
-        self.assertEqual(reveal(dataset.len()), 2)
-
     def test_row_indexing(self):
         data = ObliviousDataset(sample(s(0), s(1)), sample(s(2), s(3)))
         self.assertEqual(reveal(data[0]), Sample([0, 1], 0))
