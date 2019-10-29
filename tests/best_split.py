@@ -18,10 +18,6 @@ class AttributeTests(unittest.TestCase):
         best_attribute = select_best_attribute(samples)
         self.assertEqual(run(output(best_attribute)), 2)
 
-    def test_select_best_attribute_no_samples(self):
-        samples = ObliviousDataset()
-        self.assertRaises(ValueError, select_best_attribute, samples)
-
     def test_select_best_attribute_with_gini_denominator_zero(self):
         samples = ObliviousDataset(
             Sample([s(0), s(0), s(1), s(0)], s(1)),

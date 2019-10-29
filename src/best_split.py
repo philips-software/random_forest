@@ -26,9 +26,6 @@ def select_best_attribute(samples):
 
 
 def calculate_gains(samples):
-    if len(samples) == 0:
-        raise ValueError("Expected at least one sample")
-
     number_of_attributes = len(samples[0].inputs)
 
     gains = []
