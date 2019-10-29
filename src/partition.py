@@ -22,3 +22,12 @@ def partition_on(samples, attribute_index, threshold):
     right = left.map(lambda value: 1 - value)
 
     return samples.select(left), samples.select(right)
+
+
+def partition_on_binary_attribute(samples, attribute_index):
+    selected_attribute = samples.column(attribute_index)
+
+    right = selected_attribute
+    left = right.map(lambda value: 1 - value)
+
+    return samples.select(left), samples.select(right)
