@@ -5,6 +5,8 @@ from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 from src.output import Secret, output
 from src.array import ObliviousArray
+from functools import reduce
+import operator
 
 s = mpc.SecInt()
 
@@ -33,6 +35,9 @@ class ObliviousDataset(ObliviousArray):
         else:
             values = [row[index] for row in self]
             return ObliviousArray(*values, included=self.included)
+
+    def len(self):
+        return reduce(operator.add, self.included)
 
     @property
     def outcomes(self):
