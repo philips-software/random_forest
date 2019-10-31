@@ -11,8 +11,7 @@ def select_best_attribute(samples):
     This is based on which attribute would yield the highest Gini gain.
 
     Keyword arguments:
-    samples -- a matrix containing a sample in each row and an attribute value in each cell
-    outcomes -- an array that for each sample contains the expected outcome
+    samples -- a list of Samples
 
     Return value:
     Column index of the attribute that is best suited for splitting the dataset.
