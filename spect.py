@@ -1,9 +1,13 @@
-from mpyc.runtime import mpc
-from src.output import output
-from src.train import train
-from src.dataset import ObliviousDataset, Sample
-from src.secint import secint as s
 import cProfile
+import sys
+
+from mpyc.runtime import mpc
+
+from src.dataset import ObliviousDataset, Sample
+from src.output import output
+from src.secint import secint as s
+from src.train import train
+
 
 def sample(ins, out):
     return Sample([s(i) for i in ins], s(out))
@@ -280,7 +284,11 @@ spect_samples = ObliviousDataset(
 )
 
 def main():
-    cProfile.run('mpc.run(output(train(spect_samples, depth=3)))')
+    tree = mpc.run(output(train(spect_samples, depth=3)))
+    print(tree)
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == 'profile':
+        cProfile.run('main()')
+    else:
+        main()
