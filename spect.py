@@ -1,4 +1,5 @@
 from mpyc.runtime import mpc
+from src.output import output
 from src.train import train
 from src.dataset import ObliviousDataset, Sample
 from src.secint import secint as s
@@ -279,7 +280,7 @@ spect_samples = ObliviousDataset(
 )
 
 def main():
-    cProfile.run('train(spect_samples, depth=3)')
+    cProfile.run('mpc.run(output(train(spect_samples, depth=3)))')
 
 if __name__ == '__main__':
-    mpc.run(main())
+    main()
