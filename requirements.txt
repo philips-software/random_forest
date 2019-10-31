@@ -1,3 +1,4 @@
 mpyc==0.5
 pytest
 pytest-watch
+gmpy2
