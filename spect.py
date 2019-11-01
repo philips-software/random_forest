@@ -283,19 +283,9 @@ spect_samples = ObliviousDataset.create(
     sample([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0)
 )
 
-def pretty_print(tree, leader=''):
-    next_leader = leader + '|  '
-    if tree.left:
-        print(f"{leader}if {tree.attribute} == 0")
-        pretty_print(tree.left, next_leader)
-    if tree.right:
-        print(f"{leader}if {tree.attribute} == 1")
-        pretty_print(tree.right, next_leader)
-
-
 def main():
     tree = mpc.run(output(train(spect_samples, depth=5)))
-    pretty_print(tree)
+    tree.pretty_print()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'profile':
