@@ -22,7 +22,7 @@ class ObliviousArray(Secret):
 
     def len(self):
         if self.included:
-            return reduce(operator.add, self.included, s(0))
+            return mpc.sum(self.included)
         else:
             return len(self.values)
 
