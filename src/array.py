@@ -58,7 +58,9 @@ class ObliviousArray(Secret):
         return reduce(operation, values, neutral_element)
 
     def sum(self):
-        return self.reduce(0, operator.add)
+        included_values = self.included_values_or_zero()
+        theSum = mpc.sum(included_values)
+        return theSum
 
     def __getitem__(self, index):
         is_selected = [i == index for i in range(len(self.values))]
