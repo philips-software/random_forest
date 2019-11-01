@@ -8,6 +8,7 @@ from src.tree import Node
 
 def train(samples, depth=1):
     best_attribute = select_best_attribute(samples)
+    print(f'Training at depth: {depth}')
     (samples_left, samples_right) = partition_binary(samples, best_attribute)
     left = train(samples_left, depth=depth-1) if depth > 1 else None
     right = train(samples_right, depth=depth-1) if depth > 1 else None
