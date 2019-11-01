@@ -1,6 +1,5 @@
 import operator
 from dataclasses import dataclass
-from functools import reduce
 from typing import Any, Sequence
 
 from mpyc.runtime import mpc
@@ -48,14 +47,6 @@ class ObliviousArray(Secret):
     def map(self, function):
         values = map(function, self.values)
         return ObliviousArray(*values, included=self.included)
-
-    def reduce(self, neutral_element, operation):
-        values = self.values
-        included = self.included
-        if included:
-            values = [mpc.if_else(included[i], values[i], neutral_element)
-                      for i in range(len(self.values))]
-        return reduce(operation, values, neutral_element)
 
     def sum(self):
         included_values = self.included_values_or_zero()
