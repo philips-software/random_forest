@@ -21,3 +21,11 @@ ptw [-c]
 ```
 
 (The `-c` flag causes the screen to be cleared before each run.)
+
+### Profiling
+
+```
+pip install snakeviz
+python -m cProfile -o spect.stats spect.py
+snakeviz spect.stats
+```
