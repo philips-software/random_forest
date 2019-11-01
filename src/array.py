@@ -8,16 +8,16 @@ from src.output import Secret, output
 from src.secint import secint as s
 
 
-@dataclass
+@dataclass(frozen=True)
 class ObliviousArray(Secret):
     values: [Any]
     included: [Any]
 
-    def __init__(self, *values, included=None):
+    @classmethod
+    def create(cls, *values, included=None):
         if len(values) == 1 and isinstance(values[0], Sequence):
             values = values[0]
-        self.values = values
-        self.included = included
+        return cls(values, included)
 
     def len(self):
         if self.included:
@@ -45,8 +45,8 @@ class ObliviousArray(Secret):
             return self.values
 
     def map(self, function):
-        values = map(function, self.values)
-        return ObliviousArray(*values, included=self.included)
+        values = list(map(function, self.values))
+        return ObliviousArray(values, self.included)
 
     def sum(self):
         included_values = self.included_values_or_zero()

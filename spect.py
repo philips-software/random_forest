@@ -13,7 +13,7 @@ def sample(ins, out):
     return Sample([s(i) for i in ins], s(out))
 
 
-spect_samples = ObliviousDataset(
+spect_samples = ObliviousDataset.create(
     sample([1,0,0,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0],0),
     sample([1,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0],1),
     sample([1,1,0,1,0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0],0),

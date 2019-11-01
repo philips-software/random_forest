@@ -26,15 +26,15 @@ class ObliviousDataset(ObliviousArray):
             number_of_columns = len(self.values[0].inputs)
             is_selected = [i == index for i in range(number_of_columns)]
             values = mpc.matrix_prod([is_selected], self.values, True)[0]
-            return ObliviousArray(*values, included=self.included)
+            return ObliviousArray(values, self.included)
         else:
             values = [row[index] for row in self]
-            return ObliviousArray(*values, included=self.included)
+            return ObliviousArray(values, self.included)
 
     @property
     def outcomes(self):
         outs = [sample.outcome for sample in self.values]
-        return ObliviousArray(*outs, included=self.included)
+        return ObliviousArray(outs, self.included)
 
     def __getitem__(self, index):
         return self.values[index]
