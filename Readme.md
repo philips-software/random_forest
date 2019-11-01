@@ -11,5 +11,13 @@ pip install -r requirements.txt
 Run the test by invoking:
 
 ```bash
-./test.py
+pytest
 ```
+
+Run tests in watch mode:
+
+```bash
+ptw [-c]
+```
+
+(The `-c` flag causes the screen to be cleared before each run.)
