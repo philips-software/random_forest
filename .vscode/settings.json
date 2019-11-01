@@ -12,5 +12,6 @@
     "python.testing.pytestEnabled": true,
     "python.testing.nosetestsEnabled": false,
     "python.testing.promptToConfigure": false,
-    "python.testing.cwd": ""
+    "python.testing.cwd": "",
+    "python.pythonPath": "/Users/nlv19703/.asdf/shims/python"
 }
