@@ -17,6 +17,8 @@ class ObliviousArray(Secret):
     def create(cls, *values, included=None):
         if len(values) == 1 and isinstance(values[0], Sequence):
             values = values[0]
+        else:
+            values = list(values)
         return cls(values, included)
 
     def len(self):
@@ -28,6 +30,8 @@ class ObliviousArray(Secret):
     def select(self, *include):
         if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousArray)):
             include = include[0]
+        else:
+            include = list(include)
 
         if isinstance(include, ObliviousArray):
             return self.select(*include.included_values_or_zero())
@@ -35,12 +39,12 @@ class ObliviousArray(Secret):
         if self.included == None:
             return type(self)(self.values, included=include)
 
-        include = mpc.schur_prod(list(self.included), include)
+        include = mpc.schur_prod(self.included, include)
         return type(self)(self.values, included=include)
 
     def included_values_or_zero(self):
         if self.included:
-            return mpc.schur_prod(list(self.values), self.included)
+            return mpc.schur_prod(self.values, self.included)
         else:
             return self.values
 
