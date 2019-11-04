@@ -1,17 +1,17 @@
 {
-    "cSpell.words": [
-        "gini"
-    ],
-    "python.testing.unittestArgs": [
-        "-v",
-        "-s",
-        "./tests",
-        "-p",
-        "*.py"
-    ],
-    "python.testing.pytestEnabled": true,
-    "python.testing.nosetestsEnabled": false,
-    "python.testing.promptToConfigure": false,
-    "python.testing.cwd": "",
-    "python.pythonPath": "/Users/nlv19703/.asdf/shims/python"
+  "cSpell.words": [
+    "gini"
+  ],
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./tests",
+    "-p",
+    "*.py"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.promptToConfigure": false,
+  "python.testing.cwd": "",
+  "python.pythonPath": "/Users/nlv19703/.asdf/shims/python"
 }
