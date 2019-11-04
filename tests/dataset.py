@@ -12,11 +12,6 @@ def sample(*inputs):
 
 
 class ObliviousDatasetTest(unittest.TestCase):
-    def test_row_indexing(self):
-        data = ObliviousDataset.create(sample(s(0), s(1)), sample(s(2), s(3)))
-        self.assertEqual(reveal(data[0]), Sample([0, 1], 0))
-        self.assertEqual(reveal(data[1]), Sample([2, 3], 0))
-
     def test_column_with_public_index(self):
         dataset = ObliviousDataset.create(
             sample(s(0),  s(1),  s(2)),
@@ -60,3 +55,14 @@ class ObliviousDatasetTest(unittest.TestCase):
             Sample([s(20), s(21), s(22)], outcome=s(80))
         ).select([s(1), s(0), s(1)])
         self.assertEqual(reveal(dataset.outcomes), [60, 80])
+
+    def test_number_of_attributes(self):
+        dataset = ObliviousDataset.create(
+            sample(s(1), s(2), s(3)),
+            sample(s(4), s(5), s(6))
+        )
+        self.assertEqual(dataset.number_of_attributes, 3)
+
+    def test_number_of_attributes_empty_set(self):
+        dataset = ObliviousDataset.create()
+        self.assertEqual(dataset.number_of_attributes, 0)

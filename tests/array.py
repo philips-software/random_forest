@@ -30,12 +30,6 @@ class ObliviousArrayTest(unittest.TestCase):
         dataset = dataset.select(s(1), s(0), s(1))
         self.assertEqual(reveal(dataset.len()), 2)
 
-    def test_oblivious_indexing(self):
-        array = ObliviousArray.create(s(10), s(20), s(30))
-        self.assertEqual(reveal(array[s(0)]), 10)
-        self.assertEqual(reveal(array[s(1)]), 20)
-        self.assertEqual(reveal(array[s(2)]), 30)
-
     def test_reveal_all_elements(self):
         array = ObliviousArray.create(s(10), s(20), s(30))
         self.assertEqual(reveal(array), [10, 20, 30])

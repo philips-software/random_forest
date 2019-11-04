@@ -57,10 +57,6 @@ class ObliviousArray(Secret):
         theSum = mpc.sum(included_values)
         return theSum
 
-    def __getitem__(self, index):
-        is_selected = [i == index for i in range(len(self.values))]
-        return mpc.matrix_prod([is_selected], [self.values], True)[0][0]
-
     async def __output__(self):
         values = [await output(value) for value in self.values]
         if self.included:

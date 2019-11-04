@@ -11,6 +11,9 @@ class Sample(Secret):
     inputs: [Any]
     outcome: Any
 
+    def __len__(self):
+        return len(self.inputs)
+
     def __getitem__(self, index):
         return self.inputs[index]
 
@@ -28,7 +31,7 @@ class ObliviousDataset(ObliviousArray):
             values = mpc.matrix_prod([is_selected], self.values, True)[0]
             return ObliviousArray(values, self.included)
         else:
-            values = [row[index] for row in self]
+            values = [row[index] for row in self.values]
             return ObliviousArray(values, self.included)
 
     @property
@@ -36,5 +39,9 @@ class ObliviousDataset(ObliviousArray):
         outs = [sample.outcome for sample in self.values]
         return ObliviousArray(outs, self.included)
 
-    def __getitem__(self, index):
-        return self.values[index]
+    @property
+    def number_of_attributes(self):
+        if len(self.values) > 0:
+            return len(self.values[0])
+        else:
+            return 0

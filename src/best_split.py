@@ -25,7 +25,7 @@ def select_best_attribute(samples):
 
 
 def calculate_gains(samples):
-    number_of_attributes = len(samples[0].inputs)
+    number_of_attributes = samples.number_of_attributes
 
     gains = []
     for column in range(number_of_attributes):
