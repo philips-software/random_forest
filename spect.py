@@ -283,9 +283,10 @@ spect_samples = ObliviousDataset.create(
     sample([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],0)
 )
 
-def main():
-    tree = mpc.run(output(train(spect_samples, depth=5)))
-    tree.pretty_print()
-
+async def main():
+    async with mpc:
+        tree = await output(train(spect_samples, depth=4))
+        tree.pretty_print()
+   
 if __name__ == '__main__':
-        main()
+    mpc.run(main())
