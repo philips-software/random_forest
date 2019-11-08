@@ -31,4 +31,4 @@ def ge_quotient(left, right):
     """
     (a, b) = left
     (c, d) = right
-    return mpc.if_else(a * d >= b * c, True, False)
+    return a * d >= b * c
