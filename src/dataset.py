@@ -41,7 +41,4 @@ class ObliviousDataset(ObliviousArray):
 
     @property
     def number_of_attributes(self):
-        if len(self.values) > 0:
-            return len(self.values[0])
-        else:
-            return 0
+        return len(self.values[0]) if len(self.values) > 0 else 0
