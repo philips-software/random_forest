@@ -2,8 +2,10 @@ from dataclasses import dataclass
 from typing import Any
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
+from mpyc.random import random_unit_vector
 from src.output import Secret, output
 from src.array import ObliviousArray
+from src.secint import secint
 
 
 @dataclass
@@ -42,3 +44,7 @@ class ObliviousDataset(ObliviousArray):
     @property
     def number_of_attributes(self):
         return len(self.values[0]) if len(self.values) > 0 else 0
+
+    def random_sample(self):
+        selected_row = random_unit_vector(secint, self.len())
+        return [self.values[i] * selected_row[i] for i in range(len(selected_row))]

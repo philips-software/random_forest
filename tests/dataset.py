@@ -66,3 +66,24 @@ class ObliviousDatasetTest(unittest.TestCase):
     def test_number_of_attributes_empty_set(self):
         dataset = ObliviousDataset.create()
         self.assertEqual(dataset.number_of_attributes, 0)
+
+    def test_random_sample(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(1), s(2), s(3)], s(4))
+        )
+        self.assertEqual(reveal(dataset.random_sample()), Sample([1, 2, 3], 4))
+
+    def test_random_sample(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(1), s(2), s(3)], s(4)),
+            Sample([s(11), s(12), s(13)], s(14))
+        )
+        seenFirst = False
+        seenSecond = False
+        for i in range(10):
+            seenFirst = seenFirst or reveal(dataset.random_sample()
+                                            ) == Sample([1, 2, 3], 4)
+            seenSecond = seenSecond or reveal(dataset.random_sample()
+                                              ) == Sample([11, 12, 13], 14)
+        self.assertTrue(seenFirst)
+        self.assertTrue(seenSecond)
