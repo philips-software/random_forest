@@ -55,9 +55,7 @@ class ObliviousArray(Secret):
         return ObliviousArray(values, self.included)
 
     def sum(self):
-        included_values = self.included_values_or_zero()
-        theSum = mpc.sum(included_values)
-        return theSum
+        return mpc.sum(self.included_values_or_zero())
 
     def choice(self):
         included = random_unit_vector(secint, self.len())
