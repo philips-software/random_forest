@@ -2,11 +2,13 @@ import operator
 from dataclasses import dataclass
 from functools import reduce
 from typing import Any
+
+from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
-from mpyc.random import random_unit_vector
-from src.output import Secret, output
+
 from src.array import ObliviousArray
+from src.output import Secret, output
 from src.secint import secint
 
 
