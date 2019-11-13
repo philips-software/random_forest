@@ -19,6 +19,18 @@ class Sample(Secret):
     def __getitem__(self, index):
         return self.inputs[index]
 
+    def __add__(self, other):
+        return Sample(
+            [self.inputs[i] + other.inputs[i] for i in range(len(self))],
+            self.outcome + other.outcome
+        )
+
+    def __mul__(self, other):
+        return Sample(
+            [input * other for input in self.inputs],
+            self.outcome * other
+        )
+
     async def __output__(self):
         return Sample(await output(self.inputs),
                       await output(self.outcome))

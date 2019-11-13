@@ -87,3 +87,14 @@ class ObliviousDatasetTest(unittest.TestCase):
                                               ) == Sample([11, 12, 13], 14)
         self.assertTrue(seenFirst)
         self.assertTrue(seenSecond)
+
+
+class SampleTest(unittest.TestCase):
+    def test_add_samples(self):
+        sample1 = Sample([s(1), s(2), s(3)], s(4))
+        sample2 = Sample([s(5), s(6), s(7)], s(8))
+        self.assertEqual(reveal(sample1 + sample2), Sample([6, 8, 10], 12))
+
+    def test_multiply_samples(self):
+        sample = Sample([s(1), s(2), s(3)], s(4))
+        self.assertEqual(reveal(sample * s(2)), Sample([2, 4, 6], 8))
