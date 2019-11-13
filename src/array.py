@@ -8,10 +8,11 @@ from mpyc.runtime import mpc
 
 from src.output import Secret, output
 from src.secint import secint
+from src.sequence import ObliviousSequence
 
 
 @dataclass(frozen=True)
-class ObliviousArray(Secret):
+class ObliviousArray(Secret, ObliviousSequence):
     values: [Any]
     included: [Any]
 
