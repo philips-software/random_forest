@@ -18,7 +18,7 @@ class ObliviousArray(Secret):
     @classmethod
     def create(cls, *values, included=None):
         if len(values) == 1 and isinstance(values[0], Sequence):
-            values = values[0]
+            values = list(values[0])
         else:
             values = list(values)
         return cls(values, included)
