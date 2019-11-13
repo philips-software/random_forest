@@ -41,18 +41,20 @@ class ObliviousDataset(ObliviousArray):
 
     def column(self, index):
         if isinstance(index, Share):
-            number_of_columns = len(self.values[0].inputs)
-            is_selected = mpc.unit_vector(index, number_of_columns)
-            values = mpc.matrix_prod([is_selected], self.values, True)[0]
-            return ObliviousArray(values, self.included)
+            is_selected = mpc.unit_vector(index, self.number_of_attributes)
+            return self.map(
+                lambda sample:
+                ObliviousArray
+                .create(sample.inputs)
+                .select(is_selected)
+                .sum()
+            )
         else:
-            values = [row[index] for row in self.values]
-            return ObliviousArray(values, self.included)
+            return self.map(lambda sample: sample.inputs[index])
 
     @property
     def outcomes(self):
-        outs = [sample.outcome for sample in self.values]
-        return ObliviousArray(outs, self.included)
+        return self.map(lambda sample: sample.outcome)
 
     @property
     def number_of_attributes(self):
