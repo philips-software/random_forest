@@ -1,4 +1,6 @@
+import operator
 from dataclasses import dataclass
+from functools import reduce
 from typing import Any
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
@@ -58,5 +60,6 @@ class ObliviousDataset(ObliviousArray):
         return len(self.values[0]) if len(self.values) > 0 else 0
 
     def random_sample(self):
-        selected_row = random_unit_vector(secint, self.len())
-        return [self.values[i] * selected_row[i] for i in range(len(selected_row))]
+        included = random_unit_vector(secint, self.len())
+        selected = [self.values[i] * included[i] for i in range(self.len())]
+        return reduce(operator.add, selected)
