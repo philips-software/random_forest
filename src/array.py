@@ -1,11 +1,13 @@
 import operator
 from dataclasses import dataclass
+from functools import reduce
 from typing import Any, Sequence
 
+from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
 
 from src.output import Secret, output
-from src.secint import secint as s
+from src.secint import secint
 
 
 @dataclass(frozen=True)
@@ -56,6 +58,11 @@ class ObliviousArray(Secret):
         included_values = self.included_values_or_zero()
         theSum = mpc.sum(included_values)
         return theSum
+
+    def choice(self):
+        included = random_unit_vector(secint, self.len())
+        selected = [self.values[i] * included[i] for i in range(self.len())]
+        return reduce(operator.add, selected)
 
     async def __output__(self):
         values = [await output(value) for value in self.values]

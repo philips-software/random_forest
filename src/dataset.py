@@ -1,15 +1,12 @@
 import operator
 from dataclasses import dataclass
-from functools import reduce
 from typing import Any
 
-from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 
 from src.array import ObliviousArray
 from src.output import Secret, output
-from src.secint import secint
 
 
 @dataclass
@@ -60,8 +57,3 @@ class ObliviousDataset(ObliviousArray):
     @property
     def number_of_attributes(self):
         return len(self.values[0]) if len(self.values) > 0 else 0
-
-    def random_sample(self):
-        included = random_unit_vector(secint, self.len())
-        selected = [self.values[i] * included[i] for i in range(self.len())]
-        return reduce(operator.add, selected)

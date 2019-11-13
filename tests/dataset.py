@@ -69,14 +69,15 @@ class ObliviousDatasetTest(unittest.TestCase):
 
     def test_random_sample_with_one_sample(self):
         dataset = ObliviousDataset.create(Sample([s(1), s(2), s(3)], s(4)))
-        self.assertEqual(reveal(dataset.random_sample()), Sample([1, 2, 3], 4))
+        self.assertEqual(reveal(dataset.choice()),
+                         Sample([1, 2, 3], 4))
 
     def test_random_sample(self):
         dataset = ObliviousDataset.create(
             Sample([s(1), s(2), s(3)], s(4)),
             Sample([s(11), s(12), s(13)], s(14))
         )
-        randomSamples = [reveal(dataset.random_sample()) for _ in range(10)]
+        randomSamples = [reveal(dataset.choice()) for _ in range(10)]
         self.assertIn(Sample([1, 2, 3], 4), randomSamples)
         self.assertIn(Sample([11, 12, 13], 14), randomSamples)
 
