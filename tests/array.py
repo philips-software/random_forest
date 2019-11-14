@@ -13,17 +13,17 @@ class ObliviousArrayTest(unittest.TestCase):
     def test_initialize_with_list(self):
         self.assertEqual(
             reveal(ObliviousArray.create(s(1), s(2))),
-            reveal(ObliviousArray([s(1), s(2)], None))
+            reveal(ObliviousArray([s(1), s(2)]))
         )
         self.assertEqual(
             reveal(ObliviousArray.create(s(1))),
-            reveal(ObliviousArray([s(1)], None))
+            reveal(ObliviousArray([s(1)]))
         )
 
     def test_len(self):
         self.assertEqual(ObliviousArray.create().len(), 0)
         self.assertEqual(ObliviousArray(
-            [s(0), s(1), s(2)], None).len(), 3)
+            [s(0), s(1), s(2)]).len(), 3)
 
     def test_len_of_subset(self):
         dataset = ObliviousArray.create(s(0), s(1), s(2))

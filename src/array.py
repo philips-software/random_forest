@@ -14,61 +14,71 @@ from src.sequence import ObliviousSequence
 @dataclass(frozen=True)
 class ObliviousArray(Secret, ObliviousSequence):
     values: [Any]
-    included: [Any]
 
     @classmethod
-    def create(cls, *values, included=None):
+    def create(cls, *values):
         if len(values) == 1 and isinstance(values[0], Sequence):
             values = list(values[0])
         else:
             values = list(values)
-        return cls(values, included)
+        return cls(values)
 
     def len(self):
-        if self.included:
-            return mpc.sum(self.included)
-        else:
-            return len(self.values)
+        return len(self.values)
 
     def select(self, *include):
-        if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousArray)):
+        if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousSequence)):
             include = include[0]
         else:
             include = list(include)
 
-        if isinstance(include, ObliviousArray):
+        if isinstance(include, ObliviousSequence):
             return self.select(*include.included_values_or_zero())
 
-        if self.included == None:
-            return type(self)(self.values, included=include)
-
-        include = mpc.schur_prod(self.included, include)
-        return type(self)(self.values, included=include)
+        return ObliviousSelection(self.values, included=include)
 
     def included_values_or_zero(self):
-        if self.included:
-            return mpc.schur_prod(self.values, self.included)
-        else:
-            return self.values
+        return self.values
 
     def map(self, function):
-        values = list(map(function, self.values))
-        return ObliviousArray(values, self.included)
+        return ObliviousArray(list(map(function, self.values)))
 
     def sum(self):
-        return mpc.sum(self.included_values_or_zero())
+        return mpc.sum(self.values)
 
     def choice(self):
-        assert(self.included == None)
-
         included = random_unit_vector(secint, self.len())
         selected = [self.values[i] * included[i] for i in range(self.len())]
         return reduce(operator.add, selected)
 
     async def __output__(self):
-        values = [await output(value) for value in self.values]
-        if self.included:
-            included = await output(self.included)
-        else:
-            included = [True] * len(self.values)
+        return [await output(value) for value in self.values]
+
+
+@dataclass(frozen=True)
+class ObliviousSelection(Secret, ObliviousSequence):
+    values: [Any]
+    included: [Any]
+
+    def len(self):
+        return mpc.sum(self.included)
+
+    def map(self, function):
+        mapped = ObliviousArray(self.values).map(function)
+        return ObliviousSelection(mapped.values, self.included)
+
+    def included_values_or_zero(self):
+        return mpc.schur_prod(self.values, self.included)
+
+    def sum(self):
+        return mpc.sum(self.included_values_or_zero())
+
+    def select(self, *include):
+        selection = ObliviousArray(self.values).select(*include)
+        included = mpc.schur_prod(self.included, selection.included)
+        return ObliviousSelection(selection.values, included)
+
+    async def __output__(self):
+        values = await output(ObliviousArray(self.values))
+        included = await output(self.included)
         return [values[i] for i in range(len(values)) if included[i]]

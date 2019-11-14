@@ -5,7 +5,7 @@ from typing import Any
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 
-from src.array import ObliviousArray
+from src.array import ObliviousArray, ObliviousSelection
 from src.output import Secret, output
 from src.sequence import ObliviousSequence
 
@@ -62,10 +62,22 @@ class __Dataset__(ObliviousSequence):
         else:
             return self.map(lambda sample: sample.inputs[index])
 
+    def select(self, *include):
+        selection = super().select(*include)
+        return ObliviousDatasetSelection(selection.values, selection.included)
+
 
 @dataclass(frozen=True)
-class ObliviousDataset(ObliviousArray, __Dataset__):
+class ObliviousDataset(__Dataset__, ObliviousArray):
+    def __init__(self, values):
+        number_of_attributes = len(values[0]) if len(values) > 0 else 0
+        ObliviousArray.__init__(self, values)
+        __Dataset__.__init__(self, number_of_attributes)
+
+
+@dataclass(frozen=True)
+class ObliviousDatasetSelection(__Dataset__, ObliviousSelection):
     def __init__(self, values, included):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
-        ObliviousArray.__init__(self, values, included)
+        ObliviousSelection.__init__(self, values, included)
         __Dataset__.__init__(self, number_of_attributes)
