@@ -91,6 +91,17 @@ class ObliviousDatasetTest(unittest.TestCase):
         with self.assertRaises(AssertionError):
             dataset.choice()
 
+    def test_determine_class_single_sample(self):
+        dataset = ObliviousDataset.create(Sample([s(0)], s(0)))
+        self.assertEqual(reveal(dataset.determine_class()), 0)
+
+    def test_determine_class_multiple_samples(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(0)], s(0)),
+            Sample([s(0)], s(1)),
+            Sample([s(0)], s(1)))
+        self.assertEqual(reveal(dataset.determine_class()), 1)
+
 
 class SampleTest(unittest.TestCase):
     def test_add_samples(self):
