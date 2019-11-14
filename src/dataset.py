@@ -7,6 +7,7 @@ from mpyc.sectypes import Share
 
 from src.array import ObliviousArray
 from src.output import Secret, output
+from src.sequence import ObliviousSequence
 
 
 @dataclass
@@ -37,7 +38,16 @@ class Sample(Secret):
                       await output(self.outcome))
 
 
-class ObliviousDataset(ObliviousArray):
+@dataclass(frozen=True)
+class __Dataset__(ObliviousSequence):
+    number_of_attributes: int
+
+    @property
+    def outcomes(self):
+        return self.map(lambda sample: sample.outcome)
+
+    def determine_class(self):
+        return self.outcomes.sum() * 2 > self.len()
 
     def column(self, index):
         if isinstance(index, Share):
@@ -52,13 +62,10 @@ class ObliviousDataset(ObliviousArray):
         else:
             return self.map(lambda sample: sample.inputs[index])
 
-    @property
-    def outcomes(self):
-        return self.map(lambda sample: sample.outcome)
 
-    @property
-    def number_of_attributes(self):
-        return len(self.values[0]) if len(self.values) > 0 else 0
-
-    def determine_class(self):
-        return self.outcomes.sum() * 2 > self.len()
+@dataclass(frozen=True)
+class ObliviousDataset(ObliviousArray, __Dataset__):
+    def __init__(self, values, included):
+        number_of_attributes = len(values[0]) if len(values) > 0 else 0
+        ObliviousArray.__init__(self, values, included)
+        __Dataset__.__init__(self, number_of_attributes)
