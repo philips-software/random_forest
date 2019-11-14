@@ -58,6 +58,8 @@ class ObliviousArray(Secret):
         return mpc.sum(self.included_values_or_zero())
 
     def choice(self):
+        assert(self.included == None)
+
         included = random_unit_vector(secint, self.len())
         selected = [self.values[i] * included[i] for i in range(self.len())]
         return reduce(operator.add, selected)
