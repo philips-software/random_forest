@@ -67,7 +67,6 @@ class __Dataset__(ObliviousSequence):
         return ObliviousDatasetSelection(selection.values, selection.included)
 
 
-@dataclass(frozen=True)
 class ObliviousDataset(__Dataset__, ObliviousArray):
     def __init__(self, values):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
@@ -75,7 +74,6 @@ class ObliviousDataset(__Dataset__, ObliviousArray):
         __Dataset__.__init__(self, number_of_attributes)
 
 
-@dataclass(frozen=True)
 class ObliviousDatasetSelection(__Dataset__, ObliviousSelection):
     def __init__(self, values, included):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
