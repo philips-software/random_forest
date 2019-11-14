@@ -32,13 +32,13 @@ class ObliviousArray(Secret, ObliviousSequence):
         else:
             include = list(include)
 
-        if isinstance(include, ObliviousSequence):
+        if isinstance(include, ObliviousArray):
+            return self.select(*include.values)
+
+        if isinstance(include, ObliviousSelection):
             return self.select(*include.included_values_or_zero())
 
         return ObliviousSelection(self.values, included=include)
-
-    def included_values_or_zero(self):
-        return self.values
 
     def map(self, function):
         return ObliviousArray(list(map(function, self.values)))
