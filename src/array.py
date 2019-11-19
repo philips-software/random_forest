@@ -5,6 +5,7 @@ from typing import Any, Sequence
 
 from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
+from mpyc.sectypes import Share
 
 from src.output import Secret, output
 from src.secint import secint
@@ -24,7 +25,10 @@ class ObliviousArray(Secret, ObliviousSequence):
         return cls(values)
 
     def len(self):
-        return len(self.values)
+        length = len(self.values)
+        if length > 0 and isinstance(self.values[0], Share):
+            length = secint(length)
+        return length
 
     def select(self, *include):
         if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousSequence)):

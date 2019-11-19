@@ -22,8 +22,8 @@ class ObliviousArrayTest(unittest.TestCase):
 
     def test_len(self):
         self.assertEqual(ObliviousArray.create().len(), 0)
-        self.assertEqual(ObliviousArray(
-            [s(0), s(1), s(2)]).len(), 3)
+        self.assertEqual(reveal(ObliviousArray(
+            [s(0), s(1), s(2)]).len()), 3)
 
     def test_len_of_subset(self):
         dataset = ObliviousArray.create(s(0), s(1), s(2))
