@@ -25,10 +25,7 @@ class ObliviousArray(Secret, ObliviousSequence):
         return cls(values)
 
     def len(self):
-        length = len(self.values)
-        if length > 0 and isinstance(self.values[0], Share):
-            length = secint(length)
-        return length
+        return secint(len(self.values))
 
     def select(self, *include):
         if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousSequence)):
@@ -51,8 +48,9 @@ class ObliviousArray(Secret, ObliviousSequence):
         return mpc.sum(self.values)
 
     def choice(self):
-        included = random_unit_vector(secint, self.len())
-        selected = [self.values[i] * included[i] for i in range(self.len())]
+        length = len(self.values)
+        included = random_unit_vector(secint, length)
+        selected = [self.values[i] * included[i] for i in range(length)]
         return reduce(operator.add, selected)
 
     async def __output__(self):
