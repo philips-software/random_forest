@@ -23,3 +23,12 @@ class Branch(Secret):
         left = await output(self.left) if self.left else self.left
         right = await output(self.right) if self.right else self.right
         return Branch(attribute, left=left, right=right)
+
+
+@dataclass
+class Leaf(Secret):
+    outcome_class: Any
+
+    async def __output__(self):
+        outcome_class = await output(self.outcome_class)
+        return Leaf(outcome_class)
