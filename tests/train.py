@@ -10,13 +10,13 @@ class TrainTests(unittest.TestCase):
 
     def test_single_sample(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
-        self.assertEqual(reveal(train(samples)), Branch(0))
+        self.assertEqual(reveal(train(samples, depth=1)), Branch(0))
 
     def test_two_samples_two_attributes(self):
         samples = ObliviousDataset.create(
             Sample([s(1), s(0)], s(0)),
             Sample([s(1), s(1)], s(1)))
-        self.assertEqual(reveal(train(samples)), Branch(1))
+        self.assertEqual(reveal(train(samples, depth=1)), Branch(1))
 
     def test_single_sample_with_some_depth(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))

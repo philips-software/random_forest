@@ -6,7 +6,7 @@ from src.secint import secint as s
 from src.tree import Branch
 
 
-def train(samples, depth=1):
+def train(samples, depth):
     best_attribute = select_best_attribute(samples)
     print(f'Training at depth: {depth}')
     (samples_left, samples_right) = partition_binary(samples, best_attribute)
