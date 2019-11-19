@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 from src.output import Secret, output
+from src.secint import secint as s
 
 
 @dataclass
@@ -28,7 +29,9 @@ class Branch(Secret):
 @dataclass
 class Leaf(Secret):
     outcome_class: Any
+    pruned: Any = s(False)
 
     async def __output__(self):
         outcome_class = await output(self.outcome_class)
-        return Leaf(outcome_class)
+        pruned = await output(self.pruned)
+        return Leaf(outcome_class, pruned)
