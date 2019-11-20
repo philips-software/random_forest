@@ -287,6 +287,6 @@ async def main():
     async with mpc:
         tree = await output(train(spect_samples, depth=4))
         tree.pretty_print()
-   
+
 if __name__ == '__main__':
     mpc.run(main())
