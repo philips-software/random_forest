@@ -26,3 +26,11 @@ class ClassificationTest(unittest.TestCase):
                       right=Leaf(s(0), s(False)))
         self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 0)
         self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 0)
+
+    def test_classify_with_pruned_subtree(self):
+        left = Branch(s(0), left=Leaf(s(0), s(True)),
+                      right=Leaf(s(1), s(True)))
+        right = Branch(s(2), left=Leaf(s(0), s(False)),
+                       right=Leaf(s(1), s(False)))
+        tree = Branch(s(1), left, right)
+        self.assertEqual(reveal(classify([s(0), s(0), s(1)], tree)), 1)
