@@ -27,10 +27,10 @@ class Branch(Secret):
 
 @dataclass
 class Leaf(Secret):
-    outcome_class: Any
+    outcome: Any
     pruned: Any
 
     async def __output__(self):
-        outcome_class = await output(self.outcome_class)
+        outcome = await output(self.outcome)
         pruned = await output(self.pruned)
-        return Leaf(outcome_class, pruned)
+        return Leaf(outcome, pruned)

@@ -3,7 +3,7 @@ from mpyc.runtime import mpc
 
 
 def classify(sample, tree):
-    return findleaf(sample, tree).outcome_class
+    return findleaf(sample, tree).outcome
 
 
 def findleaf(sample, tree):
@@ -12,8 +12,7 @@ def findleaf(sample, tree):
         left = findleaf(sample, tree.left)
         right = findleaf(sample, tree.right)
         take_left = mpc.if_else(value, right.pruned, (1 - left.pruned))
-        outcome = mpc.if_else(
-            take_left, left.outcome_class, right.outcome_class)
+        outcome = mpc.if_else(take_left, left.outcome, right.outcome)
         pruned = mpc.and_(left.pruned, right.pruned)
         return Leaf(outcome, pruned)
     if isinstance(tree, Leaf):

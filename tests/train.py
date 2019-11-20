@@ -55,8 +55,8 @@ class TrainTests(unittest.TestCase):
                    right=Branch(0, left=leaf(0), right=leaf(1))))
 
 
-def leaf(outcome_class):
-    return Leaf(outcome_class, False)
+def leaf(outcome):
+    return Leaf(outcome, False)
 
 
 def pruned():

@@ -16,5 +16,5 @@ def train(samples, depth):
         return Branch(best_attribute, left=left, right=right)
     else:
         pruned = samples.len() == s(False)
-        outcome_class = samples.determine_class()
-        return Leaf(outcome_class, pruned)
+        outcome = samples.determine_class()
+        return Leaf(outcome, pruned)
