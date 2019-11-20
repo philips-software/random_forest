@@ -1,11 +1,21 @@
+from math import sqrt
 from mpyc.runtime import mpc
 from src.secint import secint
 from src.dataset import ObliviousDataset, Sample
 from src.train import train
 
 
-def train_forest(samples, amount, depth):
-    return [train(bootstrap(samples), depth) for _ in range(amount)]
+def train_forest(samples, amount, depth, amount_of_features=None):
+    if not amount_of_features:
+        amount_of_features = int(sqrt(len(samples)))
+
+    forest = []
+    for _ in range(amount):
+        selection = random_attributes(samples, amount_of_features)
+        selection = bootstrap(selection)
+        tree = train(selection, depth)
+        forest.append(tree)
+    return forest
 
 
 def bootstrap(samples):
