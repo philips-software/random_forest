@@ -10,11 +10,11 @@ class TrainTests(unittest.TestCase):
 
     def test_single_sample_depth_zero_outcome_1(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
-        self.assertEqual(reveal(train(samples, depth=0)), Leaf(1, False))
+        self.assertEqual(reveal(train(samples, depth=0)), leaf(1))
 
     def test_single_sample_depth_zero_outcome_0(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(0)))
-        self.assertEqual(reveal(train(samples, depth=0)), Leaf(0, False))
+        self.assertEqual(reveal(train(samples, depth=0)), leaf(0))
 
     def test_two_samples_two_attributes(self):
         samples = ObliviousDataset.create(
@@ -22,27 +22,21 @@ class TrainTests(unittest.TestCase):
             Sample([s(1), s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=1)),
-            Branch(1, left=Leaf(0, False), right=Leaf(1, False)))
+            Branch(1, left=leaf(0), right=leaf(1)))
 
     def test_single_sample_depth_one(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=1)),
-            Branch(0,
-                   left=Leaf(0, pruned=True),
-                   right=Leaf(1, pruned=False)))
+            Branch(0, left=pruned(), right=leaf(1)))
 
     def test_single_sample_with_some_depth(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=2)),
             Branch(0,
-                   left=Branch(
-                       0, left=Leaf(0, True), right=Leaf(0, True)
-                   ),
-                   right=Branch(
-                       0, left=Leaf(0, True), right=Leaf(1, False)
-                   )))
+                   left=Branch(0, left=pruned(), right=pruned()),
+                   right=Branch(0, left=pruned(), right=leaf(1))))
 
     def test_multiple_samples_with_some_depth(self):
         samples = ObliviousDataset.create(
@@ -55,9 +49,15 @@ class TrainTests(unittest.TestCase):
             Branch(1,
                    left=Branch(
                        1,  # random, could have been zero as well
-                       left=Leaf(0, False),
-                       right=Leaf(0, True)
+                       left=leaf(0),
+                       right=pruned()
                    ),
-                   right=Branch(
-                       0, left=Leaf(0, False), right=Leaf(1, False)
-                   )))
+                   right=Branch(0, left=leaf(0), right=leaf(1))))
+
+
+def leaf(outcome_class):
+    return Leaf(outcome_class, False)
+
+
+def pruned():
+    return Leaf(0, True)
