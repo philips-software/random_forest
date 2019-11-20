@@ -6,8 +6,8 @@ from mpyc.runtime import mpc
 async def output(value):
     if isinstance(value, Secret):
         return await value.__output__()
-    elif isinstance(value, Sequence) and not isinstance(value, list):
-        return await output(list(value))
+    elif isinstance(value, Sequence):
+        return [await output(x) for x in value]
     return await mpc.output(value)
 
 

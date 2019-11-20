@@ -10,8 +10,12 @@ class OutputTest(unittest.TestCase):
         self.assertEqual(reveal(s(42)), 42)
 
     def test_output_secret(self):
-        class SomeSecret(Secret):
-            async def __output__(self):
-                return 42
-
         self.assertEqual(reveal(SomeSecret()), 42)
+
+    def test_output_list_of_secrets(self):
+        self.assertEqual(reveal([SomeSecret(), SomeSecret()]), [42, 42])
+
+
+class SomeSecret(Secret):
+    async def __output__(self):
+        return 42
