@@ -30,6 +30,12 @@ class Leaf(Secret):
     outcome: Any
     pruned: Any
 
+    def pretty_print(self, leader=''):
+        if self.pruned == 1:
+            print(f"{leader}<pruned>")
+        else:
+            print(f"{leader}outcome: {self.outcome}")
+
     async def __output__(self):
         outcome = await output(self.outcome)
         pruned = await output(self.pruned)
