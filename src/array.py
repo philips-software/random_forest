@@ -28,6 +28,9 @@ class ObliviousArray(Secret, ObliviousSequence):
         """length of this dataset as a plain number"""
         return len(self.values)
 
+    def __getitem__(self, index):
+        return self.values[index]
+
     def len(self):
         """length of this dataset as a secure number"""
         return secint(len(self))
