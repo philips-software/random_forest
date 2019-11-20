@@ -11,8 +11,10 @@ def findleaf(sample, tree):
         value = getitem(sample, tree.attribute)
         left = findleaf(sample, tree.left)
         right = findleaf(sample, tree.right)
-        outcome = mpc.if_else(value, right.outcome_class, left.outcome_class)
-        pruned = mpc.if_else(value, right.pruned, left.pruned)
+        take_left = mpc.if_else(value, right.pruned, (1 - left.pruned))
+        outcome = mpc.if_else(
+            take_left, left.outcome_class, right.outcome_class)
+        pruned = mpc.and_(left.pruned, right.pruned)
         return Leaf(outcome, pruned)
     if isinstance(tree, Leaf):
         return tree
