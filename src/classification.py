@@ -4,10 +4,10 @@ from mpyc.runtime import mpc
 
 def classify(sample, tree):
     if isinstance(tree, Branch):
-        return mpc.if_else(
-            getitem(sample, tree.attribute),
-            classify(sample, tree.right),
-            classify(sample, tree.left))
+        attribute_value = getitem(sample, tree.attribute)
+        left_outcome = classify(sample, tree.left)
+        right_outcome = classify(sample, tree.right)
+        return mpc.if_else(attribute_value, right_outcome, left_outcome)
     if isinstance(tree, Leaf):
         return tree.outcome_class
 
