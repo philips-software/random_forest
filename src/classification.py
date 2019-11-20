@@ -3,13 +3,19 @@ from mpyc.runtime import mpc
 
 
 def classify(sample, tree):
+    return findleaf(sample, tree).outcome_class
+
+
+def findleaf(sample, tree):
     if isinstance(tree, Branch):
-        attribute_value = getitem(sample, tree.attribute)
-        left_outcome = classify(sample, tree.left)
-        right_outcome = classify(sample, tree.right)
-        return mpc.if_else(attribute_value, right_outcome, left_outcome)
+        value = getitem(sample, tree.attribute)
+        left = findleaf(sample, tree.left)
+        right = findleaf(sample, tree.right)
+        outcome = mpc.if_else(value, right.outcome_class, left.outcome_class)
+        pruned = mpc.if_else(value, right.pruned, left.pruned)
+        return Leaf(outcome, pruned)
     if isinstance(tree, Leaf):
-        return tree.outcome_class
+        return tree
 
 
 def getitem(sample, index):
