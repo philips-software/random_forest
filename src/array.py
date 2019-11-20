@@ -24,8 +24,13 @@ class ObliviousArray(Secret, ObliviousSequence):
             values = list(values)
         return cls(values)
 
+    def __len__(self):
+        """length of this dataset as a plain number"""
+        return len(self.values)
+
     def len(self):
-        return secint(len(self.values))
+        """length of this dataset as a secure number"""
+        return secint(len(self))
 
     def select(self, *include):
         if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousSequence)):
