@@ -3,7 +3,7 @@ from typing import Any
 from src.output import Secret, output
 
 
-@dataclass
+@dataclass(frozen=True)
 class Branch(Secret):
     attribute: Any
     left: Any = None
@@ -25,7 +25,7 @@ class Branch(Secret):
         return Branch(attribute, left=left, right=right)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Leaf(Secret):
     outcome: Any
     pruned: Any
