@@ -10,27 +10,33 @@ class ClassificationTest(unittest.TestCase):
 
     def test_classify_with_only_leaf_node(self):
         sample = [s(1), s(0), s(1)]
-        tree = Leaf(s(1), pruned=False)
+        tree = leaf(s(1))
         self.assertEqual(reveal(classify(sample, tree)), 1)
 
     def test_classify_with_a_branch(self):
-        tree = Branch(s(1),
-                      left=Leaf(s(1), s(False)),
-                      right=Leaf(s(0), s(False)))
+        tree = Branch(s(1), leaf(s(1)), leaf(s(0)))
         self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 1)
         self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 0)
 
     def test_classify_with_pruned_leaf(self):
-        tree = Branch(s(1),
-                      left=Leaf(s(1), s(True)),
-                      right=Leaf(s(0), s(False)))
-        self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 0)
-        self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 0)
+        tree = Branch(s(1), pruned(), leaf(s(1)))
+        self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 1)
+        self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 1)
 
     def test_classify_with_pruned_subtree(self):
-        left = Branch(s(0), left=Leaf(s(0), s(True)),
-                      right=Leaf(s(1), s(True)))
-        right = Branch(s(2), left=Leaf(s(0), s(False)),
-                       right=Leaf(s(1), s(False)))
-        tree = Branch(s(1), left, right)
+        tree = Branch(s(1),
+                      Branch(s(0),
+                             pruned(),
+                             pruned()),
+                      Branch(s(2),
+                             leaf(s(0)),
+                             leaf(s(1))))
         self.assertEqual(reveal(classify([s(0), s(0), s(1)], tree)), 1)
+
+
+def leaf(outcome):
+    return Leaf(outcome, s(False))
+
+
+def pruned():
+    return Leaf(s(0), s(True))
