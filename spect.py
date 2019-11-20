@@ -6,7 +6,7 @@ from mpyc.runtime import mpc
 from src.dataset import ObliviousDataset, Sample
 from src.output import output
 from src.secint import secint as s
-from src.train import train
+from src.forest import train_forest
 
 
 def sample(ins, out):
@@ -285,8 +285,10 @@ spect_samples = ObliviousDataset.create(
 
 async def main():
     async with mpc:
-        tree = await output(train(spect_samples, depth=4))
-        tree.pretty_print()
+        forest = await output(train_forest(spect_samples, amount=2, depth=4))
+        for index, tree in enumerate(forest):
+            print(f"Tree #{index}")
+            tree.pretty_print()
 
 if __name__ == '__main__':
     mpc.run(main())
