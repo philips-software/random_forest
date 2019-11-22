@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from src.output import Secret
 
 
 class ObliviousSequence(ABC):

@@ -1,6 +1,3 @@
-from mpyc.runtime import mpc
-
-
 def partition_continuous(samples, attribute_index, threshold):
     """
     Splits given data set into left and right part based on the

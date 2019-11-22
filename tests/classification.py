@@ -1,5 +1,4 @@
 import unittest
-from src.dataset import Sample
 from src.tree import Branch, Leaf
 from src.secint import secint as s
 from tests.reveal import reveal

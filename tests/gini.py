@@ -1,7 +1,5 @@
 import unittest
 
-from mpyc.runtime import mpc
-
 from src.gini import avoid_zero, gini_gain_quotient
 from src.secint import secint as s
 from tests.reveal import reveal

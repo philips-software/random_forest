@@ -1,5 +1,3 @@
-from mpyc.runtime import mpc
-
 from src.best_split import select_best_attribute
 from src.partition import partition_binary
 from src.secint import secint as s

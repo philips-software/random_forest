@@ -1,7 +1,5 @@
 import unittest
 
-from mpyc.runtime import mpc
-
 from src.dataset import ObliviousDataset, Sample
 from src.secint import secint as s
 from tests.reveal import reveal

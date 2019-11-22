@@ -1,5 +1,4 @@
 import unittest
-from src.dataset import ObliviousDataset
 from src.tree import Leaf, Branch
 from src.forest import train_forest, bootstrap, random_attributes
 from tests.example import samples

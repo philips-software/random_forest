@@ -1,7 +1,5 @@
 import unittest
 
-from mpyc.runtime import mpc
-
 from src.best_split import select_best_attribute
 from src.dataset import ObliviousDataset, Sample
 from src.secint import secint as s

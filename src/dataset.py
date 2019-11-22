@@ -1,4 +1,3 @@
-import operator
 from dataclasses import dataclass
 from typing import Any
 

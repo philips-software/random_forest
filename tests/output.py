@@ -1,6 +1,6 @@
 import unittest
 
-from src.output import Secret, output
+from src.output import Secret
 from src.secint import secint as s
 from tests.reveal import reveal
 

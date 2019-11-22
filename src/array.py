@@ -5,7 +5,6 @@ from typing import Any, Sequence
 
 from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
-from mpyc.sectypes import Share
 
 from src.output import Secret, output
 from src.secint import secint

@@ -1,7 +1,4 @@
-import operator
 import unittest
-
-from mpyc.runtime import mpc
 
 from src.array import ObliviousArray
 from src.secint import secint as s
