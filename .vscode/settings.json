@@ -1,11 +1,5 @@
 {
-  "python.testing.unittestArgs": [
-    "-v",
-    "-s",
-    "./tests",
-    "-p",
-    "*.py"
-  ],
+  "python.testing.unittestArgs": ["-v", "-s", "./tests", "-p", "*.py"],
   "cSpell.words": ["gini", "gini", "mpyc", "schur", "spect"],
   "python.testing.pytestEnabled": true,
   "python.testing.nosetestsEnabled": false,
