@@ -23,15 +23,14 @@ class Sample(Secret):
 
     def __add__(self, other):
         return Sample(
-            [self.inputs[i] + other.inputs[i] for i in range(len(self))],
+            mpc.vector_add(self.inputs, other.inputs),
             self.outcome + other.outcome
         )
 
     def __mul__(self, other):
-        return Sample(
-            [input * other for input in self.inputs],
-            self.outcome * other
-        )
+        multiplications = mpc.scalar_mul(other, self.inputs + [self.outcome])
+        multiplied_outcome = multiplications.pop()  # mutates multiplications
+        return Sample(multiplications, multiplied_outcome)
 
     async def __output__(self):
         return Sample(await output(self.inputs),
