@@ -285,7 +285,7 @@ spect_samples = ObliviousDataset.create(
 
 async def main():
     async with mpc:
-        forest = await output(train_forest(spect_samples, amount=2, depth=4))
+        forest = await output(await train_forest(spect_samples, amount=2, depth=4))
         for index, tree in enumerate(forest):
             print(f"Tree #{index}")
             tree.pretty_print()
