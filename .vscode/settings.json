@@ -1,7 +1,4 @@
 {
-  "cSpell.words": [
-    "gini"
-  ],
   "python.testing.unittestArgs": [
     "-v",
     "-s",
@@ -9,6 +6,7 @@
     "-p",
     "*.py"
   ],
+  "cSpell.words": ["gini", "gini", "mpyc", "schur", "spect"],
   "python.testing.pytestEnabled": true,
   "python.testing.nosetestsEnabled": false,
   "python.testing.promptToConfigure": false,
