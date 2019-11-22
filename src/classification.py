@@ -8,7 +8,7 @@ def classify(sample, tree):
 
 def findleaf(sample, tree):
     if isinstance(tree, Branch):
-        value = getitem(sample, tree.attribute)
+        value = get_attribute_value_for_sample(sample, tree.attribute)
         left = findleaf(sample, tree.left)
         right = findleaf(sample, tree.right)
         take_left = mpc.if_else(value, right.pruned, (1 - left.pruned))
@@ -19,6 +19,6 @@ def findleaf(sample, tree):
         return tree
 
 
-def getitem(sample, index):
+def get_attribute_value_for_sample(sample, index):
     unit_vector = mpc.unit_vector(index, len(sample))
     return mpc.sum(mpc.schur_prod(sample, unit_vector))
