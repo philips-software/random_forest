@@ -38,7 +38,8 @@ class ObliviousArray(Secret, ObliviousSequence):
         return secint(len(self))
 
     def select(self, *include):
-        if len(include) == 1 and isinstance(include[0], (Sequence, ObliviousSequence)):
+        if len(include) == 1 \
+                and isinstance(include[0], (Sequence, ObliviousSequence)):
             include = include[0]
         else:
             include = list(include)

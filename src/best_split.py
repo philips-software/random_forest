@@ -13,7 +13,8 @@ def select_best_attribute(samples):
     samples -- a list of Samples
 
     Return value:
-    Column index of the attribute that is best suited for splitting the dataset.
+    Column index of the attribute that is best suited for splitting the
+    data set.
 
     Attribute values and outcomes are expected to be either 0 or 1.
     """

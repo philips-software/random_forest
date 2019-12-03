@@ -7,7 +7,7 @@ from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 
-from src.array import ObliviousArray, ObliviousSelection
+from src.array import ObliviousArray
 from src.output import Secret, output
 from src.secint import secint
 from src.sequence import ObliviousSequence
