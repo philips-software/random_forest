@@ -42,8 +42,8 @@ class Sample(Secret):
 
 @dataclass(frozen=True)
 class __Dataset__(ObliviousSequence):
-    number_of_attributes: int
     rows: ObliviousArray
+    number_of_attributes: int
 
     def len(self):
         return self.rows.len()
@@ -78,12 +78,15 @@ class __Dataset__(ObliviousSequence):
         selection = self.rows.select(*include)
         return ObliviousDatasetSelection(selection, self.number_of_attributes)
 
+    async def __output__(self):
+        return await output(self.rows)
+
 
 class ObliviousDataset(__Dataset__, Secret):
     def __init__(self, values):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
         rows = ObliviousArray.create(values)
-        __Dataset__.__init__(self, number_of_attributes, rows)
+        __Dataset__.__init__(self, rows, number_of_attributes)
 
     @classmethod
     def create(cls, *values):
@@ -101,13 +104,6 @@ class ObliviousDataset(__Dataset__, Secret):
         selected = [self.rows[i] * included[i] for i in range(length)]
         return reduce(operator.add, selected)
 
-    async def __output__(self):
-        return await output(self.rows)
-
 
 class ObliviousDatasetSelection(__Dataset__, Secret):
-    def __init__(self, selection, number_of_attributes):
-        __Dataset__.__init__(self, number_of_attributes, selection)
-
-    async def __output__(self):
-        return await output(self.rows)
+    pass
