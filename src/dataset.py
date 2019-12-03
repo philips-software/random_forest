@@ -42,17 +42,17 @@ class Sample(Secret):
 
 @dataclass(frozen=True)
 class __Dataset__(ObliviousSequence):
-    rows: ObliviousArray
+    samples: ObliviousArray
     number_of_attributes: int
 
     def len(self):
-        return self.rows.len()
+        return self.samples.len()
 
     def map(self, function):
-        return self.rows.map(function)
+        return self.samples.map(function)
 
     def sum(self):
-        return self.rows.sum()
+        return self.samples.sum()
 
     @property
     def outcomes(self):
@@ -75,33 +75,33 @@ class __Dataset__(ObliviousSequence):
             return self.map(lambda sample: sample.inputs[index])
 
     def select(self, *include):
-        selection = self.rows.select(*include)
+        selection = self.samples.select(*include)
         return ObliviousDatasetSelection(selection, self.number_of_attributes)
 
     async def __output__(self):
-        return await output(self.rows)
+        return await output(self.samples)
 
 
 class ObliviousDataset(__Dataset__, Secret):
     def __init__(self, values):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
-        rows = ObliviousArray.create(values)
-        __Dataset__.__init__(self, rows, number_of_attributes)
+        samples = ObliviousArray.create(values)
+        __Dataset__.__init__(self, samples, number_of_attributes)
 
     @classmethod
     def create(cls, *values):
         return ObliviousDataset(values)
 
     def __len__(self):
-        return len(self.rows)
+        return len(self.samples)
 
     def __getitem__(self, index):
-        return self.rows[index]
+        return self.samples[index]
 
     def choice(self):
-        length = len(self.rows)
+        length = len(self.samples)
         included = random_unit_vector(secint, length)
-        selected = [self.rows[i] * included[i] for i in range(length)]
+        selected = [self.samples[i] * included[i] for i in range(length)]
         return reduce(operator.add, selected)
 
 
