@@ -34,8 +34,7 @@ class ObliviousArray(Secret, ObliviousSequence):
         """get item with a secret index"""
         length = len(self.values)
         included = mpc.unit_vector(index, length)
-        selected = [self.values[i] * included[i] for i in range(length)]
-        return reduce(operator.add, selected)
+        return mpc.sum(mpc.schur_prod(self.values, included))
 
     def len(self):
         """length of this dataset as a secure number"""
