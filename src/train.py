@@ -7,7 +7,7 @@ from src.tree import Branch, Leaf
 def train(samples, depth):
     print(f'Training at depth: {depth}')
     if depth > 0:
-        best_attribute = select_best_attribute(samples)
+        (best_attribute, _) = select_best_attribute(samples)
         (samples_left, samples_right) = partition_binary(samples, best_attribute)
         left = train(samples_left, depth=depth-1)
         right = train(samples_right, depth=depth-1)

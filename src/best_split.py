@@ -1,7 +1,9 @@
-from src.gini import gini_gain_quotient, avoid_zero
-from src.maximum import index_of_maximum
 from dataclasses import dataclass
 from typing import Any
+
+from src.gini import avoid_zero, gini_gain_quotient
+from src.maximum import index_of_maximum
+from src.secint import secint as s
 
 
 def select_best_attribute(samples):
@@ -21,7 +23,7 @@ def select_best_attribute(samples):
     gains = calculate_gains(samples)
     gains = [(numerator, avoid_zero(denominator))
              for (numerator, denominator) in gains]
-    return index_of_maximum(*gains)
+    return (index_of_maximum(*gains), s(0))
 
 
 def select_best_threshold(samples, column):
