@@ -23,6 +23,14 @@ def select_best_attribute(samples):
     return index_of_maximum(*gains)
 
 
+def select_best_threshold(samples, column):
+    gains = calculate_gains_for_thresholds(samples, column)
+    gains = [(numerator, avoid_zero(denominator))
+             for (numerator, denominator) in gains]
+    index = index_of_maximum(*gains)
+    return samples.column(column).getitem(index)
+
+
 def calculate_gains(samples):
     number_of_attributes = samples.number_of_attributes
 
@@ -34,13 +42,34 @@ def calculate_gains(samples):
     return gains
 
 
+def calculate_gains_for_thresholds(samples, column):
+    gains = []
+    for threshold in samples.column(column):
+        gain = calculate_gain_for_threshold(samples, column, threshold)
+        gains.append(gain)
+
+    return gains
+
+
 def calculate_gain_for_attribute(samples, column):
-    aggregation = Aggregation(total=samples.len())
+    is_right = samples.column(column)
+    return calculate_gain(is_right, samples.outcomes)
 
-    aggregation.right_total = samples.column(column).sum()
 
-    classified_one = samples.select(samples.outcomes)
-    right_classified_one = classified_one.column(column)
+def calculate_gain_for_threshold(samples, column, threshold):
+    is_right = samples \
+        .column(column) \
+        .map(lambda value: value > threshold)
+
+    return calculate_gain(is_right, samples.outcomes)
+
+
+def calculate_gain(is_right, outcomes):
+    aggregation = Aggregation(total=is_right.len())
+
+    aggregation.right_total = is_right.sum()
+
+    right_classified_one = is_right.select(outcomes)
     left_classified_one = right_classified_one.map(lambda value: 1 - value)
 
     aggregation.right_amount_classified_one = right_classified_one.sum()
