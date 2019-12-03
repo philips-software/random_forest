@@ -76,3 +76,8 @@ class ObliviousArrayTest(unittest.TestCase):
         array = array.select(s(1), s(0), s(1))
         sum = array.sum()
         self.assertEqual(reveal(sum), 40)
+
+    def test_getitem_with_secret_index(self):
+        array = ObliviousArray.create(s(10), s(20), s(30))
+        item = array.getitem(s(1))
+        self.assertEqual(reveal(item), 20)

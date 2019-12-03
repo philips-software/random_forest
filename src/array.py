@@ -30,6 +30,13 @@ class ObliviousArray(Secret, ObliviousSequence):
     def __getitem__(self, index):
         return self.values[index]
 
+    def getitem(self, index):
+        """get item with a secret index"""
+        length = len(self.values)
+        included = mpc.unit_vector(index, length)
+        selected = [self.values[i] * included[i] for i in range(length)]
+        return reduce(operator.add, selected)
+
     def len(self):
         """length of this dataset as a secure number"""
         return secint(len(self))
