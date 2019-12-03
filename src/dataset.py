@@ -44,6 +44,7 @@ class Sample(Secret):
 class __Dataset__(ObliviousSequence):
     samples: ObliviousArray
     number_of_attributes: int
+    continuous_attributes: [int]
 
     def len(self):
         return self.samples.len()
@@ -76,21 +77,29 @@ class __Dataset__(ObliviousSequence):
 
     def select(self, *include):
         selection = self.samples.select(*include)
-        return ObliviousDatasetSelection(selection, self.number_of_attributes)
+        return ObliviousDatasetSelection(
+            selection,
+            self.number_of_attributes,
+            self.continuous_attributes
+        )
+
+    def is_continuous(self, attribute_index):
+        return attribute_index in self.continuous_attributes
 
     async def __output__(self):
         return await output(self.samples)
 
 
 class ObliviousDataset(__Dataset__, Secret):
-    def __init__(self, values):
+    def __init__(self, values, continuous_attributes=()):
         number_of_attributes = len(values[0]) if len(values) > 0 else 0
         samples = ObliviousArray.create(values)
-        __Dataset__.__init__(self, samples, number_of_attributes)
+        __Dataset__.__init__(
+            self, samples, number_of_attributes, continuous_attributes)
 
     @classmethod
-    def create(cls, *values):
-        return ObliviousDataset(values)
+    def create(cls, *values, continuous_attributes=()):
+        return ObliviousDataset(values, continuous_attributes)
 
     def __len__(self):
         return len(self.samples)

@@ -90,6 +90,16 @@ class ObliviousDatasetTest(unittest.TestCase):
             Sample([s(0)], s(1)))
         self.assertEqual(reveal(dataset.determine_class()), 1)
 
+    def test_continuous_attributes(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(0), s(1), s(1)], s(0)),
+            Sample([s(1), s(2), s(1)], s(1)),
+            continuous_attributes=[1]
+        )
+        self.assertFalse(dataset.is_continuous(0))
+        self.assertTrue(dataset.is_continuous(1))
+        self.assertFalse(dataset.is_continuous(2))
+
 
 class SampleTest(unittest.TestCase):
     def test_add_samples(self):
