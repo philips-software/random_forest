@@ -1,11 +1,15 @@
+import operator
 from dataclasses import dataclass
+from functools import reduce
 from typing import Any
 
+from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
 from mpyc.sectypes import Share
 
 from src.array import ObliviousArray, ObliviousSelection
 from src.output import Secret, output
+from src.secint import secint
 from src.sequence import ObliviousSequence
 
 
@@ -92,7 +96,10 @@ class ObliviousDataset(__Dataset__, Secret):
         return self.rows[index]
 
     def choice(self):
-        return self.rows.choice()
+        length = len(self.rows)
+        included = random_unit_vector(secint, length)
+        selected = [self.rows[i] * included[i] for i in range(length)]
+        return reduce(operator.add, selected)
 
     async def __output__(self):
         return await output(self.rows)
