@@ -13,10 +13,10 @@ class Branch(Secret):
     def pretty_print(self, leader=''):
         next_leader = leader + '|  '
         if self.left:
-            print(f"{leader}if attr_{self.attribute} == 0")
+            print(f"{leader}if attr_{self.attribute} <= {self.threshold}")
             self.left.pretty_print(next_leader)
         if self.right:
-            print(f"{leader}if {self.attribute} == 1")
+            print(f"{leader}if attr_{self.attribute} > {self.threshold}")
             self.right.pretty_print(next_leader)
 
     async def __output__(self):
