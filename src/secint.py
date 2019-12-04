@@ -1,3 +1,3 @@
 from mpyc.runtime import mpc
 
-secint = mpc.SecInt(36)
+secint = mpc.SecInt(256)
