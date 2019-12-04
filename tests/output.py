@@ -15,6 +15,9 @@ class OutputTest(unittest.TestCase):
     def test_output_list_of_secrets(self):
         self.assertEqual(reveal([SomeSecret(), SomeSecret()]), [42, 42])
 
+    def test_output_tuple_of_secrets(self):
+        self.assertEqual(reveal((SomeSecret(), SomeSecret())), (42, 42))
+
 
 class SomeSecret(Secret):
     async def __output__(self):

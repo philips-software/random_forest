@@ -7,7 +7,7 @@ from tests.reveal import reveal
 
 
 def sample(*inputs):
-    return Sample(inputs, s(0))
+    return Sample(list(inputs), s(0))
 
 
 class PartitionTests(unittest.TestCase):
