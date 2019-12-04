@@ -3,9 +3,9 @@ from mpyc.runtime import mpc
 from src.secint import secint as s
 
 
-def index_of_maximum(*quotients):
+def maximum(*quotients):
     """
-    Returns the index of the maximum in a list of quotients, aka "argmax".
+    Returns both the maximum quotient and the index of the maximum in a list.
 
     Only works for quotients that have positive numerator and denominator.
     """
@@ -13,13 +13,15 @@ def index_of_maximum(*quotients):
         raise ValueError('expected at least one quotient')
 
     maximum = quotients[0]
-    result = s(0)
+    index_of_maximum = s(0)
     for index in range(1, len(quotients)):
         quotient = quotients[index]
         is_new_maximum = ge_quotient(quotient, maximum)
-        result = mpc.if_else(is_new_maximum, index, result)
-        maximum = mpc.if_else(is_new_maximum, list(quotient), list(maximum))
-    return result
+        index_of_maximum = mpc.if_else(is_new_maximum, index, index_of_maximum)
+        maximum = tuple(mpc.if_else(is_new_maximum,
+                                    list(quotient),
+                                    list(maximum)))
+    return (maximum, index_of_maximum)
 
 
 def ge_quotient(left, right):
