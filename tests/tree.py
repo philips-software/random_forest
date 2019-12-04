@@ -10,10 +10,10 @@ class TreeTest(unittest.TestCase):
         self.assertEqual(reveal(Leaf(s(1), pruned=s(False))), Leaf(1, False))
 
     def test_reveal_branches(self):
-        tree = Branch(s(0),
+        tree = Branch(s(0), threshold=s(10),
                       left=Leaf(s(1), pruned=s(False)),
                       right=Leaf(s(2), pruned=s(True)))
-        expected_output = Branch(0,
+        expected_output = Branch(0, threshold=10,
                                  left=Leaf(1, pruned=False),
                                  right=Leaf(2, pruned=True))
         self.assertEqual(reveal(tree), expected_output)

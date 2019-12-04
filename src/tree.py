@@ -6,6 +6,7 @@ from src.output import Secret, output
 @dataclass(frozen=True)
 class Branch(Secret):
     attribute: Any
+    threshold: Any
     left: Any = None
     right: Any = None
 
@@ -20,9 +21,10 @@ class Branch(Secret):
 
     async def __output__(self):
         attribute = await output(self.attribute)
+        threshold = await output(self.threshold)
         left = await output(self.left) if self.left else self.left
         right = await output(self.right) if self.right else self.right
-        return Branch(attribute, left=left, right=right)
+        return Branch(attribute, threshold, left, right)
 
 
 @dataclass(frozen=True)

@@ -22,21 +22,21 @@ class TrainTests(unittest.TestCase):
             Sample([s(1), s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=1)),
-            Branch(1, left=leaf(0), right=leaf(1)))
+            Branch(1, threshold=0, left=leaf(0), right=leaf(1)))
 
     def test_single_sample_depth_one(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=1)),
-            Branch(0, left=pruned(), right=leaf(1)))
+            Branch(0, threshold=0, left=pruned(), right=leaf(1)))
 
     def test_single_sample_with_some_depth(self):
         samples = ObliviousDataset.create(Sample([s(1)], s(1)))
         self.assertEqual(
             reveal(train(samples, depth=2)),
-            Branch(0,
-                   left=Branch(0, left=pruned(), right=pruned()),
-                   right=Branch(0, left=pruned(), right=leaf(1))))
+            Branch(0, threshold=0,
+                   left=Branch(0, threshold=0, left=pruned(), right=pruned()),
+                   right=Branch(0, threshold=0, left=pruned(), right=leaf(1))))
 
     def test_multiple_samples_with_some_depth(self):
         samples = ObliviousDataset.create(
@@ -47,12 +47,14 @@ class TrainTests(unittest.TestCase):
         self.assertEqual(
             reveal(train(samples, depth=2)),
             Branch(1,
+                   threshold=0,
                    left=Branch(
                        1,  # random, could have been zero as well
+                       threshold=0,
                        left=leaf(0),
                        right=pruned()
                    ),
-                   right=Branch(0, left=leaf(0), right=leaf(1))))
+                   right=Branch(0, threshold=0, left=leaf(0), right=leaf(1))))
 
 
 def leaf(outcome):

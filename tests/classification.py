@@ -13,21 +13,21 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(reveal(classify(sample, tree)), 1)
 
     def test_classify_with_a_branch(self):
-        tree = Branch(s(1), leaf(s(1)), leaf(s(0)))
+        tree = Branch(s(1), s(0), leaf(s(1)), leaf(s(0)))
         self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 1)
         self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 0)
 
     def test_classify_with_pruned_leaf(self):
-        tree = Branch(s(1), leaf(s(1)), pruned())
+        tree = Branch(s(1), s(0), leaf(s(1)), pruned())
         self.assertEqual(reveal(classify([s(1), s(0), s(1)], tree)), 1)
         self.assertEqual(reveal(classify([s(1), s(1), s(1)], tree)), 1)
 
     def test_classify_with_pruned_subtree(self):
-        tree = Branch(s(1),
-                      Branch(s(0),
+        tree = Branch(s(1), s(0),
+                      Branch(s(0), s(0),
                              pruned(),
                              pruned()),
-                      Branch(s(2),
+                      Branch(s(2), s(0),
                              leaf(s(0)),
                              leaf(s(1))))
         self.assertEqual(reveal(classify([s(0), s(0), s(1)], tree)), 1)
