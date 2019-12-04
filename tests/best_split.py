@@ -48,3 +48,16 @@ class AttributeTests(unittest.TestCase):
         (best_attribute, threshold) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 0)
         self.assertEqual(reveal(threshold), 3)
+
+    def test_select_best_attribute_from_continuous_and_binary(self):
+        samples = ObliviousDataset.create(
+            Sample([s(0), s(1)], s(0)),
+            Sample([s(0), s(2)], s(0)),
+            Sample([s(1), s(3)], s(0)),
+            Sample([s(1), s(4)], s(1)),
+            Sample([s(1), s(5)], s(1)),
+            continuous_attributes=[1]
+        )
+        (best_attribute, threshold) = select_best_attribute(samples)
+        self.assertEqual(reveal(best_attribute), 1)
+        self.assertEqual(reveal(threshold), 3)

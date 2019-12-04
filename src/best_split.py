@@ -9,8 +9,6 @@ from src.array import ObliviousArray
 
 def select_best_attribute(samples):
     (gains, thresholds) = calculate_gains(samples)
-    gains = [(numerator, avoid_zero(denominator))
-             for (numerator, denominator) in gains]
     (_, index) = maximum(*gains)
     threshold = ObliviousArray(thresholds).getitem(index)
     return (index, threshold)
@@ -36,8 +34,6 @@ def calculate_gains(samples):
 
 def select_best_threshold(samples, column):
     gains = calculate_gains_for_thresholds(samples, column)
-    gains = [(numerator, avoid_zero(denominator))
-             for (numerator, denominator) in gains]
     (gain, index) = maximum(*gains)
     threshold = samples.column(column).getitem(index)
     return (gain, threshold)
@@ -76,7 +72,8 @@ def calculate_gain(is_right, outcomes):
     aggregation.right_amount_classified_one = right_classified_one.sum()
     aggregation.left_amount_classified_one = left_classified_one.sum()
 
-    return aggregation.gini_gain_quotient()
+    (numerator, denominator) = aggregation.gini_gain_quotient()
+    return (numerator, avoid_zero(denominator))
 
 
 @dataclass
