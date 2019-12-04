@@ -4,46 +4,43 @@ from typing import Any
 from src.gini import avoid_zero, gini_gain_quotient
 from src.maximum import maximum
 from src.secint import secint as s
+from src.array import ObliviousArray
 
 
 def select_best_attribute(samples):
-    """
-    Selects the best attribute for splitting a dataset.
-    This is based on which attribute would yield the highest Gini gain.
-
-    Keyword arguments:
-    samples -- a list of Samples
-
-    Return value:
-    Column index of the attribute that is best suited for splitting the
-    data set.
-
-    Attribute values and outcomes are expected to be either 0 or 1.
-    """
-    gains = calculate_gains(samples)
+    (gains, thresholds) = calculate_gains(samples)
     gains = [(numerator, avoid_zero(denominator))
              for (numerator, denominator) in gains]
     (_, index) = maximum(*gains)
-    return (index, s(0))
-
-
-def select_best_threshold(samples, column):
-    gains = calculate_gains_for_thresholds(samples, column)
-    gains = [(numerator, avoid_zero(denominator))
-             for (numerator, denominator) in gains]
-    (_, index) = maximum(*gains)
-    return samples.column(column).getitem(index)
+    threshold = ObliviousArray(thresholds).getitem(index)
+    return (index, threshold)
 
 
 def calculate_gains(samples):
     number_of_attributes = samples.number_of_attributes
 
     gains = []
+    thresholds = []
     for column in range(number_of_attributes):
-        gain = calculate_gain_for_attribute(samples, column)
-        gains.append(gain)
+        if samples.is_continuous(column):
+            (gain, threshold) = select_best_threshold(samples, column)
+            gains.append(gain)
+            thresholds.append(threshold)
+        else:
+            gain = calculate_gain_for_attribute(samples, column)
+            gains.append(gain)
+            thresholds.append(s(0))
 
-    return gains
+    return gains, thresholds
+
+
+def select_best_threshold(samples, column):
+    gains = calculate_gains_for_thresholds(samples, column)
+    gains = [(numerator, avoid_zero(denominator))
+             for (numerator, denominator) in gains]
+    (gain, index) = maximum(*gains)
+    threshold = samples.column(column).getitem(index)
+    return (gain, threshold)
 
 
 def calculate_gains_for_thresholds(samples, column):
