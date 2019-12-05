@@ -1,3 +1,5 @@
+from functools import reduce
+
 from mpyc.runtime import mpc
 
 from src.secint import secint as s
@@ -12,16 +14,23 @@ def maximum(*quotients):
     if not quotients:
         raise ValueError('expected at least one quotient')
 
-    maximum = quotients[0]
-    index_of_maximum = s(0)
-    for index in range(1, len(quotients)):
-        quotient = quotients[index]
-        is_new_maximum = ge_quotient(quotient, maximum)
+    def max(previous, current):
+        if not previous:
+            return (current, s(0), 0)
+
+        (maximum, index_of_maximum, index) = previous
+        index += 1
+
+        is_new_maximum = ge_quotient(current, maximum)
         index_of_maximum = mpc.if_else(is_new_maximum, index, index_of_maximum)
         maximum = tuple(mpc.if_else(is_new_maximum,
-                                    list(quotient),
+                                    list(current),
                                     list(maximum)))
-    return (maximum, index_of_maximum)
+
+        return (maximum, index_of_maximum, index)
+
+    maximum, index_of_maximum, _ = reduce(max, quotients, None)
+    return maximum, index_of_maximum
 
 
 def ge_quotient(left, right):
