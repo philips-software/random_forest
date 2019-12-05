@@ -78,6 +78,11 @@ class ObliviousArrayTest(unittest.TestCase):
         product = array.reduce(s(1), operator.mul)
         self.assertEqual(reveal(product), 300)
 
+    def test_reduce_with_initial_value(self):
+        array = ObliviousArray.create()
+        product = array.reduce(s(1), operator.mul, initial=s(42))
+        self.assertEqual(reveal(product), 42)
+
     def test_sum(self):
         array = ObliviousArray.create(s(10), s(20), s(30))
         sum = array.sum()

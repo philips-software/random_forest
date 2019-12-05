@@ -11,7 +11,7 @@ class ObliviousSequence(ABC):
         pass
 
     @abstractmethod
-    def reduce(self, neutral_element, operation):
+    def reduce(self, neutral_element, operation, initial=None):
         pass
 
     @abstractmethod

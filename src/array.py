@@ -57,8 +57,11 @@ class ObliviousArray(Secret, ObliviousSequence):
     def map(self, function):
         return ObliviousArray(list(map(function, self.values)))
 
-    def reduce(self, neutral_element, operation):
-        return reduce(operation, self.values, neutral_element)
+    def reduce(self, neutral_element, operation, initial=None):
+        if initial is None:
+            initial = neutral_element
+
+        return reduce(operation, self.values, initial)
 
     def sum(self):
         return mpc.sum(self.values)
@@ -82,11 +85,14 @@ class ObliviousSelection(Secret, ObliviousSequence):
     def included_values_or_zero(self):
         return mpc.schur_prod(self.values, self.included)
 
-    def reduce(self, neutral_element, operation):
+    def reduce(self, neutral_element, operation, initial=None):
+        if initial is None:
+            initial = neutral_element
+
         included = self.included
         values = [if_else(included[i], self.values[i], neutral_element)
                   for i in range(len(self.values))]
-        return reduce(operation, values, neutral_element)
+        return reduce(operation, values, initial)
 
     def sum(self):
         return mpc.sum(self.included_values_or_zero())
