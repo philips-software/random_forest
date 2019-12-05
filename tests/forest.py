@@ -1,7 +1,7 @@
 import unittest
 from src.tree import Leaf, Branch
 from src.forest import train_forest, bootstrap, random_attributes
-from tests.example import binary_samples as samples
+from tests.example import binary_samples as samples, continuous_samples
 from tests.reveal import reveal
 from tests.async_test import async_test
 
@@ -36,13 +36,24 @@ class ForestTest(unittest.TestCase):
         for sample in selection:
             self.assertIn(sample, all)
 
-    def test_attribute_selection_is_random(self):
-        selection1 = reveal(random_attributes(samples, 3))
-        selection2 = reveal(random_attributes(samples, 3))
+    def test_bootstrap_on_continuous_attributes(self):
+        selection = bootstrap(continuous_samples)
+        self.assertEqual(selection.continuous, continuous_samples.continuous)
+
+    @async_test
+    async def test_attribute_selection_is_random(self):
+        selection1 = reveal(await random_attributes(samples, 3))
+        selection2 = reveal(await random_attributes(samples, 3))
         self.assertNotEqual(selection1, selection2)
 
-    def test_features_are_selected_from_the_original_sample(self):
-        selection = random_attributes(samples, 3)
+    @async_test
+    async def test_attribute_selection_on_continuous_attributes(self):
+        selection = await random_attributes(continuous_samples, 1)
+        self.assertTrue(any(selection.continuous))
+
+    @async_test
+    async def test_features_are_selected_from_the_original_sample(self):
+        selection = await random_attributes(samples, 3)
         selected_columns = reveal(columns(selection))
         all_columns = reveal(columns(samples))
         for column in selected_columns:
