@@ -42,5 +42,5 @@ continuous_samples = ObliviousDataset.create(
     sample([3, 3, 2, 4], 0),
     sample([3, 3, 2, 5], 1),
     sample([3, 3, 3, 1], 0),
-    continuous_attributes=[0, 1, 2, 3]
+    continuous=[True, True, True, True]
 )

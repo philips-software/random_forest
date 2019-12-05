@@ -94,7 +94,7 @@ class ObliviousDatasetTest(unittest.TestCase):
         dataset = ObliviousDataset.create(
             Sample([s(0), s(1), s(1)], s(0)),
             Sample([s(1), s(2), s(1)], s(1)),
-            continuous_attributes=[1]
+            continuous=[False, True, False]
         )
         self.assertFalse(dataset.is_continuous(0))
         self.assertTrue(dataset.is_continuous(1))

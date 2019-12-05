@@ -634,7 +634,7 @@ samples = ObliviousDataset.create(
     sample([5, 5, 5, 2], 0),
     sample([5, 5, 5, 3], 0),
     sample([5, 5, 5, 4], 0),
-    continuous_attributes=[0, 1, 2, 3]
+    continuous=[True, True, True, True]
 )
 
 

@@ -60,7 +60,7 @@ class TrainTests(unittest.TestCase):
         samples = ObliviousDataset.create(
             Sample([s(1), s(2)], s(0)),
             Sample([s(1), s(3)], s(1)),
-            continuous_attributes=[1])
+            continuous=[False, True])
         self.assertEqual(
             reveal(train(samples, depth=1)),
             Branch(1, threshold=2, left=leaf(0), right=leaf(1)))
