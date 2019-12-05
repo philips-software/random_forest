@@ -75,7 +75,7 @@ class ObliviousDatasetTest(unittest.TestCase):
             Sample([s(1), s(2), s(3)], s(4)),
             Sample([s(11), s(12), s(13)], s(14))
         )
-        randomSamples = [reveal(dataset.choice()) for _ in range(10)]
+        randomSamples = [reveal(dataset.choice()) for _ in range(100)]
         self.assertIn(Sample([1, 2, 3], 4), randomSamples)
         self.assertIn(Sample([11, 12, 13], 14), randomSamples)
 
