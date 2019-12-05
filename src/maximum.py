@@ -21,8 +21,9 @@ def maximum(quotients):
 
         return (maximum, index_of_maximum, index + 1)
 
-    neutral = ((s(0), s(0)), s(0), s(0))
-    maximum, index_of_maximum, _ = quotients.reduce(neutral, max)
+    neutral = (s(0), s(0))
+    initial = (neutral, s(0), s(0))
+    maximum, index_of_maximum, _ = quotients.reduce(neutral, max, initial)
     return maximum, index_of_maximum
 
 
