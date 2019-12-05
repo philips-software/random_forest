@@ -4,6 +4,7 @@ from typing import Any, Sequence
 
 from mpyc.runtime import mpc
 
+from src.if_else import if_else
 from src.output import Secret, output
 from src.secint import secint
 from src.sequence import ObliviousSequence
@@ -83,7 +84,7 @@ class ObliviousSelection(Secret, ObliviousSequence):
 
     def reduce(self, neutral_element, operation):
         included = self.included
-        values = [mpc.if_else(included[i], self.values[i], neutral_element)
+        values = [if_else(included[i], self.values[i], neutral_element)
                   for i in range(len(self.values))]
         return reduce(operation, values, neutral_element)
 

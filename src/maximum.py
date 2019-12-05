@@ -1,5 +1,4 @@
-from mpyc.runtime import mpc
-
+from src.if_else import if_else
 from src.secint import secint as s
 
 
@@ -15,10 +14,10 @@ def maximum(quotients):
         (maximum, index_of_maximum, index) = previous
 
         is_new_maximum = ge_quotient(current, maximum)
-        index_of_maximum = mpc.if_else(is_new_maximum, index, index_of_maximum)
-        maximum = tuple(mpc.if_else(is_new_maximum,
-                                    list(current),
-                                    list(maximum)))
+        index_of_maximum = if_else(is_new_maximum, index, index_of_maximum)
+        maximum = tuple(if_else(is_new_maximum,
+                                list(current),
+                                list(maximum)))
 
         return (maximum, index_of_maximum, index + 1)
 

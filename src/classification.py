@@ -1,5 +1,7 @@
-from src.tree import Branch, Leaf
 from mpyc.runtime import mpc
+
+from src.if_else import if_else
+from src.tree import Branch, Leaf
 
 
 def classify(sample, tree):
@@ -12,8 +14,8 @@ def findleaf(sample, tree):
         left = findleaf(sample, tree.left)
         right = findleaf(sample, tree.right)
         take_right = value > tree.threshold
-        take_left = mpc.if_else(take_right, right.pruned, (1 - left.pruned))
-        outcome = mpc.if_else(take_left, left.outcome, right.outcome)
+        take_left = if_else(take_right, right.pruned, (1 - left.pruned))
+        outcome = if_else(take_left, left.outcome, right.outcome)
         pruned = mpc.and_(left.pruned, right.pruned)
         return Leaf(outcome, pruned)
     if isinstance(tree, Leaf):
