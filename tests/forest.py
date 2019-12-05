@@ -1,7 +1,7 @@
 import unittest
 from src.tree import Leaf, Branch
 from src.forest import train_forest, bootstrap, random_attributes
-from tests.example import samples
+from tests.example import binary_samples as samples
 from tests.reveal import reveal
 from tests.async_test import async_test
 
