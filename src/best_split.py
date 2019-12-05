@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from typing import Any
 
+from src.array import ObliviousArray
 from src.gini import avoid_zero, gini_gain_quotient
 from src.maximum import maximum
 from src.secint import secint as s
-from src.array import ObliviousArray
 
 
 def select_best_attribute(samples):
     (gains, thresholds) = calculate_gains(samples)
-    (_, index) = maximum(*gains)
+    (_, index) = maximum(ObliviousArray.create(gains))
     threshold = ObliviousArray(thresholds).getitem(index)
     return (index, threshold)
 
@@ -34,7 +34,7 @@ def calculate_gains(samples):
 
 def select_best_threshold(samples, column):
     gains = calculate_gains_for_thresholds(samples, column)
-    (gain, index) = maximum(*gains)
+    (gain, index) = maximum(ObliviousArray.create(gains))
     threshold = samples.column(column).getitem(index)
     return (gain, threshold)
 
