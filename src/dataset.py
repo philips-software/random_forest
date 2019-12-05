@@ -42,7 +42,7 @@ class Sample(Secret):
 
 @dataclass(frozen=True)
 class __Dataset__(ObliviousSequence):
-    samples: ObliviousArray
+    samples: ObliviousSequence
     number_of_attributes: int
     continuous: [bool]
 
@@ -51,6 +51,9 @@ class __Dataset__(ObliviousSequence):
 
     def map(self, function):
         return self.samples.map(function)
+
+    def reduce(self, neutral_element, operation):
+        return self.samples.reduce(neutral_element, operation)
 
     def sum(self):
         return self.samples.sum()

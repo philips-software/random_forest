@@ -1,4 +1,5 @@
 import unittest
+import operator
 
 from src.array import ObliviousArray
 from src.secint import secint as s
@@ -65,6 +66,17 @@ class ObliviousArrayTest(unittest.TestCase):
         array = array.select(s(1), s(0), s(1))
         array = array.map(lambda x: 2 * x)
         self.assertEqual(reveal(array), [20, 60])
+
+    def test_reduce(self):
+        array = ObliviousArray.create(s(10), s(20), s(30))
+        product = array.reduce(s(1), operator.mul)
+        self.assertEqual(reveal(product), 6000)
+
+    def test_reduce_on_selected_elements(self):
+        array = ObliviousArray.create(s(10), s(20), s(30))
+        array = array.select(s(1), s(0), s(1))
+        product = array.reduce(s(1), operator.mul)
+        self.assertEqual(reveal(product), 300)
 
     def test_sum(self):
         array = ObliviousArray.create(s(10), s(20), s(30))

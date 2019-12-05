@@ -11,6 +11,10 @@ class ObliviousSequence(ABC):
         pass
 
     @abstractmethod
+    def reduce(self, neutral_element, operation):
+        pass
+
+    @abstractmethod
     def sum(self):
         pass
 
