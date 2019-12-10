@@ -1,4 +1,5 @@
 from src.array import ObliviousArray, ObliviousSelection
+from src.secint import secint as s
 
 
 def sort(column, outcomes):
@@ -33,8 +34,7 @@ def sort_selection(column, outcomes):
 
 def sort_lists(*lists):
     result = [l.copy() for l in lists]
-    for (i, j) in oddeven_merge_sort(len(lists[0])):
-        compare_and_swap(i, j, *result)
+    bsort(result)
     return tuple(result)
 
 
@@ -77,3 +77,32 @@ def oddeven_merge_sort(length):
     """ "length" is the length of the list to be sorted.
     Returns a list of pairs of indices starting with 0 """
     yield from oddeven_merge_sort_range(0, length - 1)
+
+
+def bsort(*xs):
+    lists = xs[0]
+
+    def bitonic_sort(lo, n, up=True):
+        if n > 1:
+            m = n // 2
+            bitonic_sort(lo, m, not up)
+            bitonic_sort(lo + m, n - m, up)
+            bitonic_merge(lo, n, up)
+
+    def bitonic_merge(lo, n, up):
+        if n > 1:
+            # set m as the greatest power of 2 less than n:
+            m = 2**((n - 1).bit_length() - 1)
+            for i in range(lo, lo + n - m):
+                bitonic_compare(i, i + m, up)
+            bitonic_merge(lo, m, up)
+            bitonic_merge(lo + m, n - m, up)
+
+    def bitonic_compare(i, j, up):
+        b = (lists[0][i] > lists[0][j]) ^ ~s(up)
+        for x in lists:
+            d = b * (x[j] - x[i])
+            x[i], x[j] = x[i] + d, x[j] - d
+
+    bitonic_sort(0, len(lists[0]))
+    return lists
