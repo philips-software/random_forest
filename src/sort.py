@@ -79,9 +79,7 @@ def oddeven_merge_sort(length):
     yield from oddeven_merge_sort_range(0, length - 1)
 
 
-def bsort(*xs):
-    lists = xs[0]
-
+def bsort(xs):
     def bitonic_sort(lo, n, up=True):
         if n > 1:
             m = n // 2
@@ -99,10 +97,10 @@ def bsort(*xs):
             bitonic_merge(lo + m, n - m, up)
 
     def bitonic_compare(i, j, up):
-        b = (lists[0][i] > lists[0][j]) ^ ~s(up)
-        for x in lists:
+        b = (xs[0][i] > xs[0][j]) ^ ~s(up)
+        for x in xs:
             d = b * (x[j] - x[i])
             x[i], x[j] = x[i] + d, x[j] - d
 
-    bitonic_sort(0, len(lists[0]))
-    return lists
+    bitonic_sort(0, len(xs[0]))
+    return xs
