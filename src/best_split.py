@@ -19,45 +19,43 @@ def calculate_gains(samples):
 
     gains = []
     thresholds = []
-    for column in range(number_of_attributes):
-        if samples.is_continuous(column):
-            (gain, threshold) = select_best_threshold(samples, column)
+    outcomes = samples.outcomes
+    for attribute in range(number_of_attributes):
+        column = samples.column(attribute)
+        if samples.is_continuous(attribute):
+            (gain, threshold) = select_best_threshold(column, outcomes)
             gains.append(gain)
             thresholds.append(threshold)
         else:
-            gain = calculate_gain_for_attribute(samples, column)
+            gain = calculate_gain_for_attribute(column, outcomes)
             gains.append(gain)
             thresholds.append(s(0))
 
     return gains, thresholds
 
 
-def select_best_threshold(samples, column):
-    gains = calculate_gains_for_thresholds(samples, column)
+def select_best_threshold(column, outcomes):
+    gains = calculate_gains_for_thresholds(column, outcomes)
     (gain, index) = maximum(gains)
-    threshold = samples.column(column).getitem(index)
+    threshold = column.getitem(index)
     return (gain, threshold)
 
 
-def calculate_gains_for_thresholds(samples, column):
-    return samples.column(column).map(
+def calculate_gains_for_thresholds(column, outcomes):
+    return column.map(
         lambda threshold: calculate_gain_for_threshold(
-            samples, column, threshold
+            column, outcomes, threshold
         )
     )
 
 
-def calculate_gain_for_attribute(samples, column):
-    is_right = samples.column(column)
-    return calculate_gain(is_right, samples.outcomes)
+def calculate_gain_for_attribute(column, outcomes):
+    return calculate_gain(column, outcomes)
 
 
-def calculate_gain_for_threshold(samples, column, threshold):
-    is_right = samples \
-        .column(column) \
-        .map(lambda value: value > threshold)
-
-    return calculate_gain(is_right, samples.outcomes)
+def calculate_gain_for_threshold(column, outcomes, threshold):
+    is_right = column.map(lambda value: value > threshold)
+    return calculate_gain(is_right, outcomes)
 
 
 def calculate_gain(is_right, outcomes):
