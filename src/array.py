@@ -32,8 +32,8 @@ class ObliviousArray(Secret, ObliviousSequence):
     def getitem(self, index):
         """get item with a secret index"""
         length = len(self.values)
-        included = mpc.unit_vector(index, length)
-        return mpc.sum(mpc.schur_prod(self.values, included))
+        unit = mpc.unit_vector(index, length)
+        return mpc.sum(mpc.schur_prod(self.values, unit))
 
     def len(self):
         """length of this dataset as a secure number"""
@@ -84,6 +84,12 @@ class ObliviousSelection(Secret, ObliviousSequence):
 
     def included_values_or_zero(self):
         return mpc.schur_prod(self.values, self.included)
+
+    def getitem(self, index):
+        """get item with a secret index, returns 0 when item is not included"""
+        length = len(self.values)
+        unit = mpc.unit_vector(index, length)
+        return mpc.sum(mpc.schur_prod(self.included_values_or_zero(), unit))
 
     def reduce(self, neutral_element, operation, initial=None):
         if initial is None:

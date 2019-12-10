@@ -98,3 +98,10 @@ class ObliviousArrayTest(unittest.TestCase):
         array = ObliviousArray.create(s(10), s(20), s(30))
         item = array.getitem(s(1))
         self.assertEqual(reveal(item), 20)
+
+    def test_getitem_on_selected_elements(self):
+        array = ObliviousArray.create(s(10), s(20), s(30))
+        selection = array.select(s(1), s(0), s(1))
+        self.assertEqual(reveal(selection.getitem(s(0))), 10)
+        self.assertEqual(reveal(selection.getitem(s(1))), 0)
+        self.assertEqual(reveal(selection.getitem(s(2))), 30)
