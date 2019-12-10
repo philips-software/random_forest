@@ -5,6 +5,7 @@ from src.array import ObliviousArray
 from src.gini import avoid_zero, gini_gain_quotient
 from src.maximum import maximum
 from src.secint import secint as s
+from src.sort import sort
 
 
 def select_best_attribute(samples):
@@ -23,7 +24,8 @@ def calculate_gains(samples):
     for attribute in range(number_of_attributes):
         column = samples.column(attribute)
         if samples.is_continuous(attribute):
-            (gain, threshold) = select_best_threshold(column, outcomes)
+            s_column, s_outcomes = sort(column, outcomes)
+            (gain, threshold) = select_best_threshold(s_column, s_outcomes)
             gains.append(gain)
             thresholds.append(threshold)
         else:
