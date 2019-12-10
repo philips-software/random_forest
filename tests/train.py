@@ -65,6 +65,17 @@ class TrainTests(unittest.TestCase):
             reveal(train(samples, depth=1)),
             Branch(1, threshold=2, left=leaf(0), right=leaf(1)))
 
+    def test_continuous_attribute_with_some_depth(self):
+        samples = ObliviousDataset.create(
+            Sample([s(1), s(2)], s(0)),
+            Sample([s(1), s(3)], s(1)),
+            continuous=[False, True])
+        tree = reveal(train(samples, depth=2))
+        self.assertEqual(tree.attribute, 1)
+        self.assertEqual(tree.threshold, 2)
+        self.assertTrue(isinstance(tree.left, Branch))
+        self.assertTrue(isinstance(tree.right, Branch))
+
 
 def leaf(outcome):
     return Leaf(outcome, False)

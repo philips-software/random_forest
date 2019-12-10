@@ -34,18 +34,17 @@ def calculate_gains(samples):
 
 def select_best_threshold(samples, column):
     gains = calculate_gains_for_thresholds(samples, column)
-    (gain, index) = maximum(ObliviousArray.create(gains))
+    (gain, index) = maximum(gains)
     threshold = samples.column(column).getitem(index)
     return (gain, threshold)
 
 
 def calculate_gains_for_thresholds(samples, column):
-    gains = []
-    for threshold in samples.column(column):
-        gain = calculate_gain_for_threshold(samples, column, threshold)
-        gains.append(gain)
-
-    return gains
+    return samples.column(column).map(
+        lambda threshold: calculate_gain_for_threshold(
+            samples, column, threshold
+        )
+    )
 
 
 def calculate_gain_for_attribute(samples, column):
