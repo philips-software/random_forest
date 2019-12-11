@@ -1,6 +1,7 @@
+from mpyc.runtime import mpc
+
 from src.best_split import select_best_attribute
 from src.partition import partition_binary
-from src.secint import secint as s
 from src.tree import Branch, Leaf
 
 
@@ -13,6 +14,6 @@ def train(samples, depth):
         right = train(samples_right, depth=depth-1)
         return Branch(best_attribute, threshold, left=left, right=right)
     else:
-        pruned = samples.len() == s(False)
+        pruned = mpc.is_zero(samples.len())
         outcome = samples.determine_class()
         return Leaf(outcome, pruned)
