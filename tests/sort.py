@@ -1,8 +1,9 @@
 import unittest
-from tests.reveal import reveal
-from src.secint import secint as s
+
 from src.dataset import ObliviousDataset, Sample
+from src.secint import secint as s
 from src.sort import sort
+from tests.reveal import reveal
 
 
 class SortTests(unittest.TestCase):
