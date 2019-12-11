@@ -44,20 +44,16 @@ def select_best_threshold(column, outcomes):
 
 
 def calculate_gains_for_thresholds(column, outcomes):
-    return column.map(
-        lambda threshold: calculate_gain_for_threshold(
-            column, outcomes, threshold
-        )
-    )
+    gains = column.map(lambda _: None)
+    is_right = column.map(lambda _: s(1))
+    for index in range(len(column.values)):
+        is_right.values[index] = s(0)
+        gains.values[index] = calculate_gain(is_right, outcomes)
+    return gains
 
 
 def calculate_gain_for_attribute(column, outcomes):
     return calculate_gain(column, outcomes)
-
-
-def calculate_gain_for_threshold(column, outcomes, threshold):
-    is_right = column.map(lambda value: value > threshold)
-    return calculate_gain(is_right, outcomes)
 
 
 def calculate_gain(is_right, outcomes):
