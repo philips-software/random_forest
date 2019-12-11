@@ -13,7 +13,8 @@ async def train(samples, depth):
         samples_left, samples_right = partition(samples, attribute, threshold)
         left = train(samples_left, depth=depth-1)
         right = train(samples_right, depth=depth-1)
-        return Branch(attribute, threshold, left=left, right=right)
+        label = samples.label(attribute)
+        return Branch(label, threshold, left=left, right=right)
     else:
         pruned = mpc.is_zero(samples.len())
         outcome = samples.determine_class()

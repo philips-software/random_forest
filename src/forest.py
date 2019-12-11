@@ -31,7 +31,7 @@ def bootstrap(samples):
 
 
 async def random_attributes(samples, amount):
-    columns, continuous = await random_columns(samples, amount)
+    columns, continuous, labels = await random_columns(samples, amount)
     outcomes = samples.outcomes
     smaller_samples = []
     for r in range(len(samples)):
@@ -40,7 +40,7 @@ async def random_attributes(samples, amount):
         for c in range(len(columns)):
             inputs.append(columns[c][r])
         smaller_samples.append(Sample(inputs, outcome))
-    return ObliviousDataset(smaller_samples, continuous)
+    return ObliviousDataset(smaller_samples, continuous, labels)
 
 
 # reveals which chosen columns are continuous
@@ -49,5 +49,6 @@ async def random_columns(samples, amount):
     selected = mpc.random.sample(secint, indices, amount)
     return (
         [samples.column(index) for index in selected],
-        [await output(samples.is_continuous(index)) for index in selected]
+        [await output(samples.is_continuous(index)) for index in selected],
+        [samples.label(index) for index in selected]
     )
