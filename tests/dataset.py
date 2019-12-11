@@ -100,6 +100,16 @@ class ObliviousDatasetTest(unittest.TestCase):
         self.assertTrue(dataset.is_continuous(1))
         self.assertFalse(dataset.is_continuous(2))
 
+    def test_continuous_attribute_check_with_secret_index(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(0), s(1), s(1)], s(0)),
+            Sample([s(1), s(2), s(1)], s(1)),
+            continuous=[False, True, False]
+        )
+        self.assertFalse(reveal(dataset.is_continuous(s(0))))
+        self.assertTrue(reveal(dataset.is_continuous(s(1))))
+        self.assertFalse(reveal(dataset.is_continuous(s(2))))
+
 
 class SampleTest(unittest.TestCase):
     def test_add_samples(self):

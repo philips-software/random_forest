@@ -87,7 +87,11 @@ class __Dataset__(ObliviousSequence):
         )
 
     def is_continuous(self, attribute_index):
-        return self.continuous[attribute_index]
+        if isinstance(attribute_index, Share):
+            continuous = ObliviousArray(list(map(secint, self.continuous)))
+            return continuous.getitem(attribute_index)
+        else:
+            return self.continuous[attribute_index]
 
     async def __output__(self):
         return await output(self.samples)
