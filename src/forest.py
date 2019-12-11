@@ -2,7 +2,6 @@ from math import sqrt
 
 from mpyc.runtime import mpc
 
-from src.array import ObliviousArray
 from src.dataset import ObliviousDataset, Sample
 from src.output import output
 from src.secint import secint
@@ -48,8 +47,7 @@ async def random_attributes(samples, amount):
 async def random_columns(samples, amount):
     indices = range(samples.number_of_attributes)
     selected = mpc.random.sample(secint, indices, amount)
-    continuous = ObliviousArray(list(map(secint, samples.continuous)))
     return (
         [samples.column(index) for index in selected],
-        await output([continuous.getitem(index) for index in selected])
+        [await output(samples.is_continuous(index)) for index in selected]
     )
