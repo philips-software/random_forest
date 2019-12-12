@@ -45,10 +45,10 @@ def select_best_threshold(column, outcomes):
 
 def calculate_gains_for_thresholds(column, outcomes):
     gains = column.map(lambda _: None)
-    is_right = column.map(lambda _: s(1))
-    for index in range(len(column.values)):
-        is_right.values[index] = s(0)
+    is_right = column.map(lambda _: s(0))
+    for index in reversed(range(len(column.values))):
         gains.values[index] = calculate_gain(is_right, outcomes)
+        is_right.values[index] = s(1)
     return gains
 
 
