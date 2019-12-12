@@ -57,7 +57,7 @@ def calculate_gain_for_attribute(column, outcomes):
 
 
 def calculate_gain(is_right, outcomes):
-    aggregation = Aggregation(total=is_right.len())
+    aggregation = Aggregation(total=outcomes.len())
 
     aggregation.right_total = is_right.sum()
 
