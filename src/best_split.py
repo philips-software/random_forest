@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Any
 
+from mpyc.runtime import mpc
+
 from src.array import ObliviousArray
 from src.gini import avoid_zero, gini_gain_quotient
 from src.maximum import maximum
@@ -46,10 +48,19 @@ def select_best_threshold(column, outcomes):
 def calculate_gains_for_thresholds(column, outcomes):
     gains = column.map(lambda _: None)
     is_right = column.map(lambda _: s(0))
+    selection = [None for _ in range(len(column.values))]
+    last_considered_value = s(-1)
     for index in reversed(range(len(column.values))):
         gains.values[index] = calculate_gain(is_right, outcomes)
         is_right.values[index] = s(1)
-    return gains
+        is_duplicate = column.values[index] == last_considered_value
+        selection[index] = ~ is_duplicate
+        last_considered_value = mpc.if_else(
+            column.is_included(index),
+            column.values[index],
+            last_considered_value
+        )
+    return gains.select(selection)
 
 
 def calculate_gain_for_attribute(column, outcomes):

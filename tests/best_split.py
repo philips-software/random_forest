@@ -1,6 +1,6 @@
 import unittest
 
-from src.best_split import select_best_attribute
+from src.best_split import select_best_attribute, calculate_gains_for_thresholds
 from src.dataset import ObliviousDataset, Sample
 from src.secint import secint as s
 from tests.reveal import reveal
@@ -61,3 +61,16 @@ class AttributeTests(unittest.TestCase):
         (best_attribute, threshold) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 1)
         self.assertEqual(reveal(threshold), 3)
+
+    def test_calculate_gains_for_thresholds_ignores_duplicates(self):
+        samples = ObliviousDataset.create(
+            Sample([s(0)], s(0)),
+            Sample([s(0)], s(0)),
+            Sample([s(0)], s(0)),
+            continuous=[True]
+        )
+        column = samples.column(0)
+        outcomes = samples.outcomes
+        gains = calculate_gains_for_thresholds(column, outcomes)
+        plain_gains = reveal(gains)
+        self.assertEqual(len(plain_gains), 1)
