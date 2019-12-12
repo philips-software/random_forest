@@ -88,6 +88,9 @@ class __Dataset__(ObliviousSequence):
             self.labels
         )
 
+    def is_included(self, index):
+        return self.samples.is_included(index)
+
     def is_continuous(self, attribute_index):
         if isinstance(attribute_index, Share):
             continuous = ObliviousArray(list(map(secint, self.continuous)))

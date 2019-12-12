@@ -21,3 +21,7 @@ class ObliviousSequence(ABC):
     @abstractmethod
     def select(self, *include):
         pass
+
+    @abstractmethod
+    def is_included(self, index):
+        pass

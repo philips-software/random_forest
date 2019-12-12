@@ -54,6 +54,9 @@ class ObliviousArray(Secret, ObliviousSequence):
 
         return ObliviousSelection(self.values, included=include)
 
+    def is_included(self, index):
+        return secint(True)
+
     def map(self, function):
         return ObliviousArray(list(map(function, self.values)))
 
@@ -107,6 +110,9 @@ class ObliviousSelection(Secret, ObliviousSequence):
         selection = ObliviousArray(self.values).select(*include)
         included = mpc.schur_prod(self.included, selection.included)
         return ObliviousSelection(selection.values, included)
+
+    def is_included(self, index):
+        return self.included[index]
 
     async def __output__(self):
         values = await output(ObliviousArray(self.values))
