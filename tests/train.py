@@ -71,7 +71,7 @@ class TrainTests(unittest.TestCase):
             Sample([s(2)], s(0)),
             Sample([s(3)], s(1)),
             Sample([s(4)], s(1)),
-            Sample([s(4)], s(0)),
+            Sample([s(5)], s(0)),
             continuous=[True])
         tree = reveal(train(samples, depth=2))
         self.assertEqual(tree.attribute, 0)
