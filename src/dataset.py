@@ -99,7 +99,7 @@ class __Dataset__(ObliviousSequence):
             return self.continuous[attribute_index]
 
     def label(self, attribute_index):
-        labels = ObliviousArray(list(map(secint, self.labels)))
+        labels = ObliviousArray(self.labels)
         return labels.getitem(attribute_index)
 
     async def __output__(self):
@@ -113,7 +113,7 @@ class ObliviousDataset(__Dataset__, Secret):
         if not continuous:
             continuous = [False for i in range(number_of_attributes)]
         if not labels:
-            labels = [i for i in range(number_of_attributes)]
+            labels = [secint(i) for i in range(number_of_attributes)]
         __Dataset__.__init__(
             self, samples, number_of_attributes, continuous, labels)
 

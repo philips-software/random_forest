@@ -26,7 +26,8 @@ async def train_forest(samples, amount, depth, amount_of_features=None):
 def bootstrap(samples):
     return ObliviousDataset(
         [samples.choice() for _ in range(len(samples))],
-        samples.continuous
+        samples.continuous,
+        samples.labels
     )
 
 
