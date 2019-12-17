@@ -18,7 +18,7 @@ async def train_forest(samples, amount, depth, amount_of_features=None):
         await mpc.barrier()
         selection = bootstrap(selection)
         await mpc.barrier()
-        tree = train(selection, depth)
+        tree = await train(selection, depth)
         forest.append(tree)
     return forest
 
