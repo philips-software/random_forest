@@ -41,7 +41,7 @@ class Sample(Secret):
 
 
 @dataclass(frozen=True)
-class __Dataset__(ObliviousSequence):
+class ObliviousDatasetSelection(ObliviousSequence, Secret):
     samples: ObliviousSequence
     number_of_attributes: int
     continuous: [bool]
@@ -106,7 +106,7 @@ class __Dataset__(ObliviousSequence):
         return await output(self.samples)
 
 
-class ObliviousDataset(__Dataset__, Secret):
+class ObliviousDataset(ObliviousDatasetSelection):
     def __init__(self, samples, continuous=None, labels=None):
         number_of_attributes = len(samples[0]) if len(samples) > 0 else 0
         samples = ObliviousArray.create(samples)
@@ -114,7 +114,7 @@ class ObliviousDataset(__Dataset__, Secret):
             continuous = [False for i in range(number_of_attributes)]
         if not labels:
             labels = [secint(i) for i in range(number_of_attributes)]
-        __Dataset__.__init__(
+        ObliviousDatasetSelection.__init__(
             self, samples, number_of_attributes, continuous, labels)
 
     @classmethod
@@ -132,7 +132,3 @@ class ObliviousDataset(__Dataset__, Secret):
         included = random_unit_vector(secint, length)
         selected = [self.samples[i] * included[i] for i in range(length)]
         return reduce(operator.add, selected)
-
-
-class ObliviousDatasetSelection(__Dataset__, Secret):
-    pass
