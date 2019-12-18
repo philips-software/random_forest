@@ -107,19 +107,20 @@ class ObliviousDatasetSelection(ObliviousSequence, Secret):
 
 
 class ObliviousDataset(ObliviousDatasetSelection):
-    def __init__(self, samples, continuous, labels):
-        number_of_attributes = len(samples[0]) if len(samples) > 0 else 0
+    @classmethod
+    def create(cls, *samples, continuous=None, labels=None):
         samples = ObliviousArray.create(samples)
+        number_of_attributes = len(samples[0]) if len(samples) > 0 else 0
         if not continuous:
             continuous = [False for i in range(number_of_attributes)]
         if not labels:
             labels = [secint(i) for i in range(number_of_attributes)]
-        ObliviousDatasetSelection.__init__(
-            self, samples, number_of_attributes, continuous, labels)
-
-    @classmethod
-    def create(cls, *samples, continuous=None, labels=None):
-        return ObliviousDataset(samples, continuous, labels)
+        return ObliviousDataset(
+            samples,
+            number_of_attributes,
+            continuous,
+            labels
+        )
 
     def __len__(self):
         return len(self.samples)

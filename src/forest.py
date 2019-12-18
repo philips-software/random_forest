@@ -6,6 +6,7 @@ from src.dataset import ObliviousDataset, Sample
 from src.output import output
 from src.secint import secint
 from src.train import train
+from src.array import ObliviousArray
 
 
 async def train_forest(samples, amount, depth, amount_of_features=None):
@@ -22,10 +23,11 @@ async def train_forest(samples, amount, depth, amount_of_features=None):
 
 
 def bootstrap(samples):
-    return ObliviousDataset(
-        [samples.choice() for _ in range(len(samples))],
-        samples.continuous,
-        samples.labels
+    selected_samples = [samples.choice() for _ in range(len(samples))]
+    return ObliviousDataset.create(
+        *selected_samples,
+        continuous=samples.continuous,
+        labels=samples.labels
     )
 
 
@@ -39,7 +41,11 @@ async def random_attributes(samples, amount):
         for c in range(len(columns)):
             inputs.append(columns[c][r])
         smaller_samples.append(Sample(inputs, outcome))
-    return ObliviousDataset(smaller_samples, continuous, labels)
+    return ObliviousDataset.create(
+        *smaller_samples,
+        continuous=continuous,
+        labels=labels
+    )
 
 
 # reveals which chosen columns are continuous
