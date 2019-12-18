@@ -187,16 +187,24 @@ class ObliviousSortedSelection(ObliviousDatasetSelection):
     def select(self, *include):
         selected = super().select(*include)
         sorted_includes = []
+        selected_sorted_columns = []
+        selected_sorted_outcomes_list = []
         for index in range(self.number_of_attributes):
-            sorted_indices = ObliviousArray(self.sorted_indices_list[index])
-            included = ObliviousArray(selected.samples.included)
-            sorted_included = sorted_indices \
-                .map(lambda index: included.getitem(index))
-            sorted_includes.append(sorted_included)
-        selected_sorted_columns = [self.sorted_columns[i].select(
-            sorted_includes[i]) for i in range(self.number_of_attributes)]
-        selected_sorted_outcomes_list = [self.sorted_outcomes_list[i].select(
-            sorted_includes[i]) for i in range(self.number_of_attributes)]
+            if self.is_continuous(index):
+                sorted_indices = ObliviousArray(
+                    self.sorted_indices_list[index])
+                included = ObliviousArray(selected.samples.included)
+                sorted_included = sorted_indices \
+                    .map(lambda index: included.getitem(index))
+                sorted_includes.append(sorted_included)
+                selected_sorted_columns.append(
+                    self.sorted_columns[index].select(sorted_included))
+                selected_sorted_outcomes_list.append(
+                    self.sorted_outcomes_list[index].select(sorted_included))
+            else:
+                sorted_includes.append(None)
+                selected_sorted_columns.append(None)
+                selected_sorted_outcomes_list.append(None)
         return ObliviousSortedSelection(
             selected.samples,
             selected.number_of_attributes,
