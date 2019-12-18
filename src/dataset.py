@@ -11,6 +11,7 @@ from src.array import ObliviousArray
 from src.output import Secret, output
 from src.secint import secint
 from src.sequence import ObliviousSequence
+from src.sort import sort
 
 
 @dataclass
@@ -133,3 +134,24 @@ class ObliviousDataset(ObliviousDatasetSelection):
         included = random_unit_vector(secint, length)
         selected = [self.samples[i] * included[i] for i in range(length)]
         return reduce(operator.add, selected)
+
+    def sort(self):
+        sorted_columns = []
+        for index in range(self.number_of_attributes):
+            sorted_column, _ = sort(self.column(index), self.outcomes)
+            sorted_columns.append(sorted_column)
+        return ObliviousSortedDataset(
+            self.samples,
+            self.number_of_attributes,
+            self.continuous,
+            self.labels,
+            sorted_columns
+        )
+
+
+@dataclass(frozen=True)
+class ObliviousSortedDataset(ObliviousDataset):
+    sorted_columns: [ObliviousSequence]
+
+    def sorted_column(self, index):
+        return self.sorted_columns[index]
