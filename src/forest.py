@@ -6,15 +6,9 @@ from src.dataset import ObliviousDataset, Sample
 from src.output import output
 from src.secint import secint
 from src.train import train
-from mpyc.runtime import mpc
 
 
 async def train_forest(samples, amount, depth, amount_of_features=None):
-    print("Sorting...")
-    samples = samples.sort()
-    await mpc.barrier()
-    print("Sorting done")
-
     if not amount_of_features:
         amount_of_features = int(sqrt(samples.number_of_attributes))
 
@@ -22,7 +16,8 @@ async def train_forest(samples, amount, depth, amount_of_features=None):
     for _ in range(amount):
         selection = await random_attributes(samples, amount_of_features)
         selection = bootstrap(selection)
-        tree = await train(selection, depth)
+        sorted = selection.sort()
+        tree = await train(sorted, depth)
         forest.append(tree)
     return forest
 
