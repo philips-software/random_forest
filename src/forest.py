@@ -9,6 +9,8 @@ from src.train import train
 
 
 async def train_forest(samples, amount, depth, amount_of_features=None):
+    samples = samples.sort()
+
     if not amount_of_features:
         amount_of_features = int(sqrt(samples.number_of_attributes))
 

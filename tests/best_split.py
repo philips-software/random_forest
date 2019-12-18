@@ -12,7 +12,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0), s(1), s(1), s(0)], s(1)),
             Sample([s(1), s(0), s(1), s(1)], s(1)),
             Sample([s(0), s(0), s(0), s(1)], s(0))
-        )
+        ).sort()
         (best_attribute, threshold) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 2)
         self.assertEqual(reveal(threshold), 0)
@@ -22,7 +22,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0), s(0), s(1), s(0)], s(1)),
             Sample([s(0), s(0), s(1), s(0)], s(1)),
             Sample([s(0), s(0), s(0), s(0)], s(0))
-        )
+        ).sort()
         (best_attribute, _) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 2)
 
@@ -32,7 +32,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(1), s(0), s(1), s(1)], s(1)),
             Sample([s(42), s(43), s(44), s(45)], s(46)),
             Sample([s(0), s(0), s(0), s(1)], s(0)),
-        ).select([s(0), s(1), s(0), s(1)])
+        ).sort().select([s(0), s(1), s(0), s(1)])
         (best_attribute, _) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 2)
 
@@ -44,7 +44,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(4)], s(1)),
             Sample([s(5)], s(1)),
             continuous=[True]
-        )
+        ).sort()
         (best_attribute, threshold) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 0)
         self.assertEqual(reveal(threshold), 3)
@@ -57,7 +57,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(1), s(4)], s(1)),
             Sample([s(1), s(5)], s(1)),
             continuous=[False, True]
-        )
+        ).sort()
         (best_attribute, threshold) = select_best_attribute(samples)
         self.assertEqual(reveal(best_attribute), 1)
         self.assertEqual(reveal(threshold), 3)
@@ -68,7 +68,7 @@ class AttributeTests(unittest.TestCase):
             Sample([s(0)], s(0)),
             Sample([s(0)], s(0)),
             continuous=[True]
-        )
+        ).sort()
         column = samples.column(0)
         outcomes = samples.outcomes
         gains = calculate_gains_for_thresholds(column, outcomes)

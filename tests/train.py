@@ -12,33 +12,33 @@ class TrainTests(unittest.TestCase):
 
     @async_test
     async def test_single_sample_depth_zero_outcome_1(self):
-        samples = ObliviousDataset.create(Sample([s(1)], s(1)))
+        samples = ObliviousDataset.create(Sample([s(1)], s(1))).sort()
         self.assertEqual(reveal(await train(samples, depth=0)), leaf(1))
 
     @async_test
     async def test_single_sample_depth_zero_outcome_0(self):
-        samples = ObliviousDataset.create(Sample([s(1)], s(0)))
+        samples = ObliviousDataset.create(Sample([s(1)], s(0))).sort()
         self.assertEqual(reveal(await train(samples, depth=0)), leaf(0))
 
     @async_test
     async def test_two_samples_two_attributes(self):
         samples = ObliviousDataset.create(
             Sample([s(1), s(0)], s(0)),
-            Sample([s(1), s(1)], s(1)))
+            Sample([s(1), s(1)], s(1))).sort()
         self.assertEqual(
             reveal(await train(samples, depth=1)),
             Branch(1, threshold=0, left=leaf(0), right=leaf(1)))
 
     @async_test
     async def test_single_sample_depth_one(self):
-        samples = ObliviousDataset.create(Sample([s(1)], s(1)))
+        samples = ObliviousDataset.create(Sample([s(1)], s(1))).sort()
         self.assertEqual(
             reveal(await train(samples, depth=1)),
             Branch(0, threshold=0, left=pruned(), right=leaf(1)))
 
     @async_test
     async def test_single_sample_with_some_depth(self):
-        samples = ObliviousDataset.create(Sample([s(1)], s(1)))
+        samples = ObliviousDataset.create(Sample([s(1)], s(1))).sort()
         self.assertEqual(
             reveal(await train(samples, depth=2)),
             Branch(0, threshold=0,
@@ -51,7 +51,7 @@ class TrainTests(unittest.TestCase):
             Sample([s(0), s(1)], s(0)),
             Sample([s(1), s(0)], s(0)),
             Sample([s(1), s(0)], s(0)),
-            Sample([s(1), s(1)], s(1)))
+            Sample([s(1), s(1)], s(1))).sort()
         self.assertEqual(
             reveal(await train(samples, depth=2)),
             Branch(1,
@@ -69,7 +69,7 @@ class TrainTests(unittest.TestCase):
         samples = ObliviousDataset.create(
             Sample([s(1), s(2)], s(0)),
             Sample([s(1), s(3)], s(1)),
-            continuous=[False, True])
+            continuous=[False, True]).sort()
         self.assertEqual(
             reveal(await train(samples, depth=1)),
             Branch(1, threshold=2, left=leaf(0), right=leaf(1)))
@@ -82,7 +82,7 @@ class TrainTests(unittest.TestCase):
             Sample([s(3)], s(1)),
             Sample([s(4)], s(1)),
             Sample([s(5)], s(0)),
-            continuous=[True])
+            continuous=[True]).sort()
         tree = reveal(await train(samples, depth=2))
         self.assertEqual(tree.attribute, 0)
         self.assertEqual(tree.threshold, 2)
