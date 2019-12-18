@@ -44,3 +44,18 @@ class SortedDatasetTests(unittest.TestCase):
         sorted = dataset.sort()
         self.assertEqual(reveal(sorted.sorted_outcomes(0)), [0, 1, 1])
         self.assertEqual(reveal(sorted.sorted_outcomes(1)), [1, 0, 1])
+
+    def test_selection_of_sorted_dataset(self):
+        dataset = ObliviousDataset.create(
+            Sample([s(3), s(6)], s(1)),
+            Sample([s(2), s(4)], s(1)),
+            Sample([s(1), s(5)], s(0)),
+            continuous=[True, True]
+        )
+        sorted = dataset.sort()
+        selected = sorted.select(s(0), s(1), s(1))
+        print(selected.sorted_column(0))
+        self.assertEqual(reveal(selected.sorted_column(0)), [1, 2])
+        self.assertEqual(reveal(selected.sorted_column(1)), [4, 5])
+        self.assertEqual(reveal(selected.sorted_outcomes(0)), [0, 1])
+        self.assertEqual(reveal(selected.sorted_outcomes(1)), [1, 0])

@@ -10,25 +10,30 @@ def sort(column, outcomes):
 
 
 def sort_array(column, outcomes):
-    values, outcome_values = sort_lists(
+    values, outcome_values, indices = sort_lists(
         column.values,
-        outcomes.values
+        outcomes.values,
+        [s(i) for i in range(len(column.values))]
     )
     return (
         ObliviousArray(values),
-        ObliviousArray(outcome_values)
+        ObliviousArray(outcome_values),
+        indices
     )
 
 
 def sort_selection(column, outcomes):
-    values, outcome_values, included = sort_lists(
+    values, outcome_values, included, indices = sort_lists(
         column.values,
         outcomes.values,
-        column.included
+        column.included,
+        [s(i) for i in range(len(column.values))]
+
     )
     return (
         ObliviousSelection(values, included),
-        ObliviousSelection(outcome_values, included)
+        ObliviousSelection(outcome_values, included),
+        indices
     )
 
 

@@ -81,9 +81,9 @@ class ObliviousDatasetSelection(ObliviousSequence, Secret):
             return self.map(lambda sample: sample.inputs[index])
 
     def select(self, *include):
-        selection = self.samples.select(*include)
+        selected = self.samples.select(*include)
         return ObliviousDatasetSelection(
-            selection,
+            selected,
             self.number_of_attributes,
             self.continuous,
             self.labels
@@ -138,29 +138,36 @@ class ObliviousDataset(ObliviousDatasetSelection):
     def sort(self):
         sorted_columns = []
         sorted_outcomes_list = []
+        sorted_indices_list = []
         for index in range(self.number_of_attributes):
             if self.is_continuous(index):
-                sorted_column, sorted_outcomes = sort(
-                    self.column(index), self.outcomes)
+                sorted_column, sorted_outcomes, sorted_indices = sort(
+                    self.column(index),
+                    self.outcomes
+                )
                 sorted_columns.append(sorted_column)
                 sorted_outcomes_list.append(sorted_outcomes)
+                sorted_indices_list.append(sorted_indices)
             else:
                 sorted_columns.append(None)
                 sorted_outcomes_list.append(None)
+                sorted_indices_list.append(None)
         return ObliviousSortedDataset(
             self.samples,
             self.number_of_attributes,
             self.continuous,
             self.labels,
             sorted_columns,
-            sorted_outcomes_list
+            sorted_outcomes_list,
+            sorted_indices_list
         )
 
 
 @dataclass(frozen=True)
-class ObliviousSortedDataset(ObliviousDataset):
+class ObliviousSortedSelection(ObliviousDatasetSelection):
     sorted_columns: [ObliviousSequence]
     sorted_outcomes_list: [ObliviousSequence]
+    sorted_indices_list: [[Share]]
 
     def assert_column_is_sorted(self, index):
         if not self.is_continuous(index):
@@ -176,3 +183,31 @@ class ObliviousSortedDataset(ObliviousDataset):
     def sorted_outcomes(self, index):
         self.assert_column_is_sorted(index)
         return self.sorted_outcomes_list[index]
+
+    def select(self, *include):
+        selected = super().select(*include)
+        sorted_includes = []
+        for index in range(self.number_of_attributes):
+            sorted_indices = ObliviousArray(self.sorted_indices_list[index])
+            included = ObliviousArray(selected.samples.included)
+            sorted_included = sorted_indices \
+                .map(lambda index: included.getitem(index))
+            sorted_includes.append(sorted_included)
+        selected_sorted_columns = [self.sorted_columns[i].select(
+            sorted_includes[i]) for i in range(self.number_of_attributes)]
+        selected_sorted_outcomes_list = [self.sorted_outcomes_list[i].select(
+            sorted_includes[i]) for i in range(self.number_of_attributes)]
+        return ObliviousSortedSelection(
+            selected.samples,
+            selected.number_of_attributes,
+            selected.continuous,
+            selected.labels,
+            selected_sorted_columns,
+            selected_sorted_outcomes_list,
+            sorted_includes
+        )
+
+
+@dataclass(frozen=True)
+class ObliviousSortedDataset(ObliviousDataset, ObliviousSortedSelection):
+    pass

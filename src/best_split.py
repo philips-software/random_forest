@@ -26,7 +26,7 @@ def calculate_gains(samples):
     for attribute in range(number_of_attributes):
         column = samples.column(attribute)
         if samples.is_continuous(attribute):
-            s_column, s_outcomes = sort(column, outcomes)
+            s_column, s_outcomes, _ = sort(column, outcomes)
             (gain, threshold) = select_best_threshold(s_column, s_outcomes)
             gains.append(gain)
             thresholds.append(threshold)

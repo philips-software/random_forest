@@ -16,7 +16,7 @@ class SortTests(unittest.TestCase):
         )
         column = dataset.column(s(0))
         outcomes = dataset.outcomes
-        sorted_column, sorted_outcomes = sort(column, outcomes)
+        sorted_column, sorted_outcomes, _ = sort(column, outcomes)
         self.assertEqual(reveal(sorted_column), [1, 2, 3, 4])
         self.assertEqual(reveal(sorted_outcomes), [6, 5, 7, 8])
 
@@ -29,6 +29,6 @@ class SortTests(unittest.TestCase):
         ).select(s(1), s(1), s(1), s(0))
         column = dataset.column(s(0))
         outcomes = dataset.outcomes
-        sorted_column, sorted_outcomes = sort(column, outcomes)
+        sorted_column, sorted_outcomes, _ = sort(column, outcomes)
         self.assertEqual(reveal(sorted_column), [1, 2, 3])
         self.assertEqual(reveal(sorted_outcomes), [6, 5, 7])
