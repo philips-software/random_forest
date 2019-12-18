@@ -6,7 +6,6 @@ from src.dataset import ObliviousDataset, Sample
 from src.output import output
 from src.secint import secint
 from src.train import train
-from src.array import ObliviousArray
 
 
 async def train_forest(samples, amount, depth, amount_of_features=None):
