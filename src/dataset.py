@@ -138,8 +138,11 @@ class ObliviousDataset(ObliviousDatasetSelection):
     def sort(self):
         sorted_columns = []
         for index in range(self.number_of_attributes):
-            sorted_column, _ = sort(self.column(index), self.outcomes)
-            sorted_columns.append(sorted_column)
+            if self.is_continuous(index):
+                sorted_column, _ = sort(self.column(index), self.outcomes)
+                sorted_columns.append(sorted_column)
+            else:
+                sorted_columns.append(None)
         return ObliviousSortedDataset(
             self.samples,
             self.number_of_attributes,
@@ -154,4 +157,9 @@ class ObliviousSortedDataset(ObliviousDataset):
     sorted_columns: [ObliviousSequence]
 
     def sorted_column(self, index):
+        if not self.is_continuous(index):
+            raise IndexError(
+                f"column {index} is not sorted, " +
+                "perhaps it is not a continuous attribute?"
+            )
         return self.sorted_columns[index]
