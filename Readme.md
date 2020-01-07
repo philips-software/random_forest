@@ -63,9 +63,9 @@ tree algorithm for MPC (See chapter 6 of [this SODA document][paper]). Many
 thanks to Berry Schoenmakers who developed [MPyC][mpyc] and helped us throughout
 the implementation of this algorithm.
 
-[ci]: https://github.com/charterhouse/random_forest/workflows/Build%20and%20test/badge.svg
+[ci]: https://github.com/philips-software/random_forest/workflows/Build%20and%20test/badge.svg
 [soda]: https://www.soda-project.eu
 [paper]: https://www.soda-project.eu/wp-content/uploads/2019/10/SODA-D2.3-Use-case-specific-algorithms.pdf
 [mpyc]: https://github.com/lschoe/mpyc
-[spect]: https://github.com/Charterhouse/random_forest/blob/master/spect.py
-[balance]: https://github.com/Charterhouse/random_forest/blob/master/balance.py
+[spect]: ./spect.py
+[balance]: ./balance.py
