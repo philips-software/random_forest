@@ -1,4 +1,4 @@
-git+https://github.com/lschoe/mpyc
+mpyc==0.6
 pytest
 pytest-watch
 gmpy2
