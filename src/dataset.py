@@ -5,7 +5,7 @@ from typing import Any
 
 from mpyc.random import random_unit_vector
 from mpyc.runtime import mpc
-from mpyc.sectypes import Share
+from mpyc.sectypes import SecureObject as Share
 
 from src.array import ObliviousArray
 from src.output import Secret, output
