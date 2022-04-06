@@ -1,4 +1,4 @@
-mpyc==0.6
+mpyc>=0.7
 pytest
 pytest-watch
 gmpy2
